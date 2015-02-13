@@ -1,0 +1,5 @@
+name: NpcTraitPack
+author: JCThePants
+main: com.jcwhatever.nucleus.npc.traits.NpcTraitPack
+version: 0.1-beta
+depend: [NucleusFramework]
