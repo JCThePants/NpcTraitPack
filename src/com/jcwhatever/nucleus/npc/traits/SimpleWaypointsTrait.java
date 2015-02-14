@@ -25,8 +25,8 @@
 package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
-import com.jcwhatever.nucleus.providers.npc.goals.INpcGoal;
-import com.jcwhatever.nucleus.providers.npc.goals.NpcGoalResult;
+import com.jcwhatever.nucleus.providers.npc.ai.actions.INpcActionSelector;
+import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -182,23 +182,22 @@ public class SimpleWaypointsTrait extends NpcTraitType {
             }
 
             @Override
-            public NpcGoalResult run() {
-
-                NpcGoalResult result = NpcGoalResult.CONTINUE;
+            public void run(INpcActionSelector selector) {
 
                 if (!getNpc().getNavigator().isRunning()) {
+
                     next();
+
                     if (_waypoints.isEmpty()) {
                         _agents.update("onFinish", getNpc());
-                        result = NpcGoalResult.FINISH;
+
+                        selector.finish();
                     }
                 }
-
-                return result;
             }
 
             @Override
-            public boolean shouldRun() {
+            public boolean canRun() {
 
                 if (_waypoints.isEmpty() && _current == null)
                     return false;
