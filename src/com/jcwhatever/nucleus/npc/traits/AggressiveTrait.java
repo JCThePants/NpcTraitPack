@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.collections.players.PlayerSet;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.INpcProvider;
-import com.jcwhatever.nucleus.providers.npc.goals.INpcGoals;
+import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoals;
 import com.jcwhatever.nucleus.providers.npc.navigator.INpcNav;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
@@ -240,6 +240,10 @@ public class AggressiveTrait extends NpcTraitType {
             INpc vehicle = getNpc().getNPCVehicle();
             if (vehicle != null) {
                 vehicle.lookAt(_target);
+            }
+
+            if (!getNpc().getNavigator().isRunning()) {
+                setTarget(_target);
             }
         }
     }
