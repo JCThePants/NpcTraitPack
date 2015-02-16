@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 
 /**
  * An implementation of {@link LivingEntityTrait} specific to
- * {@link Horse} entities.
+ * {@link org.bukkit.entity.Horse} entities.
  *
  * <p>Trait is registered with the lookup name "NpcTraitPack:LivingEntity"</p>
  */
@@ -72,7 +72,7 @@ public class EntityHorseTrait extends LivingEntityTrait {
      * Set the color the horse spawns with. If the horse is spawned,
      * its current color is also updated.
      *
-     * @param color  The {@code Horse.Color} or color name.
+     * @param color  The {@link Horse.Color} or color name.
      *
      * @return  Self for chaining.
      */
@@ -98,7 +98,7 @@ public class EntityHorseTrait extends LivingEntityTrait {
      * Set the style the horse spawns with. If the horse is spawned,
      * its current color is also updated.
      *
-     * @param style  The {@code Horse.Style} or style name.
+     * @param style  The {@link Horse.Style} or style name.
      *
      * @return  Self for chaining.
      */
@@ -125,7 +125,7 @@ public class EntityHorseTrait extends LivingEntityTrait {
      * Set the variant the horse is spawned with. If the horse is spawned,
      * its current variant is also updated.
      *
-     * @param variant  The {@code Horse.Variant} or variant name.
+     * @param variant  The {@link Horse.Variant} or variant name.
      *
      * @return  Self for chaining.
      */

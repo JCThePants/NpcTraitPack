@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 
 /**
  * An implementation of {@link LivingEntityTrait} specific to
- * {@link Villager} entities.
+ * {@link org.bukkit.entity.Villager} entities.
  *
  * <p>Trait is registered with the lookup name "NpcTraitPack:LivingEntity"</p>
  */
@@ -65,7 +65,8 @@ public class EntityVillagerTrait extends EntityAgeableTrait {
      * Set the profession the villager is spawned with. If the villager is
      * already spawned, the current entity is also updated.
      *
-     * @param profession  The {@code Villager.Profession} or profession name.
+     * @param profession  The {@link org.bukkit.entity.Villager.Profession}
+     *                    or profession name.
      *
      * @return  Self for chaining.
      */

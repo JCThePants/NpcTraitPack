@@ -43,7 +43,7 @@ import java.util.LinkedList;
 import javax.annotation.Nullable;
 
 /**
- * Trait for an NPC whose entity type is an implementation of a {@link LivingEntity}.
+ * Trait for an NPC whose entity type is an implementation of a {@link org.bukkit.entity.LivingEntity}.
  *
  * <p>Extended with more specific implementations where available, used when a more specific
  * living entity trait is not available.</p>
@@ -100,7 +100,7 @@ public class LivingEntityTrait extends NpcTrait {
     /**
      * Remove a potion effect from the NPC.
      *
-     * @param potionEffectType  The {@code PotionEffectType} or name.
+     * @param potionEffectType  The {@link org.bukkit.potion.PotionEffectType} or name.
      *
      * @return  Self for chaining.
      */
@@ -273,7 +273,7 @@ public class LivingEntityTrait extends NpcTrait {
     /**
      * Get the NPC living entity.
      *
-     * @return  The {@code LivingEntity} or null if not spawned.
+     * @return  The {@link org.bukkit.entity.LivingEntity} or null if not spawned.
      */
     @Nullable
     protected LivingEntity getLivingEntity() {
@@ -308,13 +308,14 @@ public class LivingEntityTrait extends NpcTrait {
             return enumClass.cast(name);
         }
         else {
-            throw new IllegalArgumentException("Invalid type provided. Unable to convert to type: " + enumClass.getName());
+            throw new IllegalArgumentException("Invalid type provided. Unable to convert to type: "
+                    + enumClass.getName());
         }
     }
 
     /**
-     * Get a {@code PotionEffectType} from an object. The object must be
-     * an instance of {@code PotionEffectType} or the name of the type.
+     * Get a {@link org.bukkit.potion.PotionEffectType} from an object. The object must be
+     * an instance of {@link org.bukkit.potion.PotionEffectType} or the name of the type.
      *
      * @param object  The potion effect type or name.
      *

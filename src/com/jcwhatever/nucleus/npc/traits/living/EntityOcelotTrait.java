@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 
 /**
  * An implementation of {@link LivingEntityTrait} specific to
- * {@link Ocelot} entities.
+ * {@link org.bukkit.entity.Ocelot} entities.
  *
  * <p>Trait is registered with the lookup name "NpcTraitPack:LivingEntity"</p>
  */
@@ -66,7 +66,7 @@ public class EntityOcelotTrait extends EntityAgeableTrait {
      * Set the cat type the ocelot is spawned with. If the NPC is currently
      * spawned, the NPC's entity cat type is also updated.
      *
-     * @param catType  The {@code Ocelot.Type} or type name.
+     * @param catType  The {@link Ocelot.Type} or type name.
      *
      * @return  Self for chaining.
      */

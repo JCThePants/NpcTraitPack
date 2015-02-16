@@ -197,7 +197,7 @@ public class AggressiveTrait extends NpcTraitType {
         /**
          * Get the current target of aggression.
          *
-         * @return  The {@code Entity} or null if there is no target.
+         * @return  The {@link org.bukkit.entity.Entity} or null if there is no target.
          */
         @Nullable
         public Entity getTarget() {

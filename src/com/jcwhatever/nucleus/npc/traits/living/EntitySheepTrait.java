@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 
 /**
  * An implementation of {@link LivingEntityTrait} specific to
- * {@link Sheep} entities.
+ * {@link org.bukkit.entity.Sheep} entities.
  *
  * <p>Trait is registered with the lookup name "NpcTraitPack:LivingEntity"</p>
  */
@@ -91,7 +91,7 @@ public class EntitySheepTrait extends EntityAgeableTrait {
      * Set the dye color the sheep is spawned with. If the sheep is currently
      * spawned, the current entity is also updated.
      *
-     * @param dyeColor  The {@code DyeColor} or dye color name.
+     * @param dyeColor  The {@link org.bukkit.DyeColor} or dye color name.
      *
      * @return  Self for chaining.
      */

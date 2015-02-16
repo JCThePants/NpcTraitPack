@@ -35,7 +35,7 @@ import org.bukkit.entity.Wolf;
 import javax.annotation.Nullable;
 
 /**
- * An implementation of {@link LivingEntityTrait} specific to {@link Wolf} entities.
+ * An implementation of {@link LivingEntityTrait} specific to {@link org.bukkit.entity.Wolf} entities.
  *
  * <p>Trait is registered with the lookup name "NpcTraitPack:LivingEntity"</p>
  */
@@ -67,7 +67,7 @@ public class EntityWolfTrait extends EntityAgeableTrait {
      * Set the color of the wolfs collar when spawned. If the wolf is already
      * spawned, the current entity is also updated.
      *
-     * @param dyeColor  The {@code DyeColor} or dye color name.
+     * @param dyeColor  The {@link org.bukkit.DyeColor} or dye color name.
      *
      * @return  Self for chaining.
      */

@@ -81,8 +81,6 @@ public class LookingTrait extends NpcTraitType {
 
         private boolean _isEnabled;
         private boolean _isTalkNod;
-
-        private int _currentLookStep = 0;
         private double _range = 5;
 
         /**
@@ -116,7 +114,6 @@ public class LookingTrait extends NpcTraitType {
                 return this;
 
             _isEnabled = isEnabled;
-            _currentLookStep = 0;
 
             return this;
         }
@@ -227,7 +224,7 @@ public class LookingTrait extends NpcTraitType {
         /**
          * Get the entity that is being looked at.
          *
-         * @return  The {@code Entity} or null if an entity is not set.
+         * @return  The {@link org.bukkit.entity.Entity} or null if an entity is not set.
          */
         @Nullable
         public Entity getEntity() {
@@ -240,7 +237,7 @@ public class LookingTrait extends NpcTraitType {
         /**
          * Get the location that is being looked at.
          *
-         * @return  The {@code Location} or null if an entity is not set.
+         * @return  The {@link org.bukkit.Location} or null if an entity is not set.
          */
         @Nullable
         public Location getLocation() {
@@ -314,7 +311,7 @@ public class LookingTrait extends NpcTraitType {
             if (entity.getLocation().distanceSquared(location) > 1) {
 
                 Location finalLook = entity instanceof LivingEntity
-                        ? entity.getLocation().clone().add(0, ((LivingEntity) entity).getEyeHeight() - 1.5, 0)
+                        ? ((LivingEntity) entity).getEyeLocation()
                         : entity.getLocation();
 
                 Location look = getNextLook(finalLook, _currentLook, 5);
@@ -363,7 +360,7 @@ public class LookingTrait extends NpcTraitType {
 
             if (close != null && close.getLocation().distanceSquared(npcEntity.getLocation()) > 1) {
 
-                Location target = close.getLocation().clone().add(0, close.getEyeHeight() - 1.5, 0);
+                Location target = close.getLocation();
 
                 Location look = getNextLook(target, _currentLook, 5);
 

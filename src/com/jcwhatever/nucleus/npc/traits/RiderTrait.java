@@ -75,7 +75,7 @@ public class RiderTrait extends NpcTraitType {
         /**
          * Get the current vehicle NPC.
          *
-         * @return  The vehicle {@code INpc} or null if one is not set.
+         * @return  The vehicle {@link INpc} or null if one is not set.
          */
         @Nullable
         public INpc getVehicle() {
@@ -89,7 +89,7 @@ public class RiderTrait extends NpcTraitType {
          * vehicle is disposed.
          *
          * @param vehicleName  The vehicles NPC name.
-         * @param entityType   The {@code EntityType} or entity type name.
+         * @param entityType   The {@link org.bukkit.entity.EntityType} or entity type name.
          *
          * @return  Self for chaining.
          */
