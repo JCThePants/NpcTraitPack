@@ -77,25 +77,18 @@ public class FreezeHeightTrait extends NpcTraitType {
         public FreezeHeight setEnabled(boolean isEnabled) {
             _isEnabled = isEnabled;
 
+            setY();
             return this;
         }
 
         @Override
         public void onAdd() {
-            if (getNpc().isSpawned()) {
-                Location location = getNpc().getLocation();
-                assert location != null;
-
-                _y = location.getY();
-            }
+            setY();
         }
 
         @Override
         public void onSpawn() {
-            Location location = getNpc().getLocation();
-            assert location != null;
-
-            _y = location.getY();
+            setY();
         }
 
         @Override
@@ -119,6 +112,15 @@ public class FreezeHeightTrait extends NpcTraitType {
             }
 
             entity.setVelocity(vector);
+        }
+
+        private void setY() {
+            if (getNpc().isSpawned()) {
+                Location location = getNpc().getLocation();
+                assert location != null;
+
+                _y = location.getY();
+            }
         }
     }
 }
