@@ -25,8 +25,9 @@
 package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
-import com.jcwhatever.nucleus.providers.npc.ai.actions.INpcActionSelector;
+import com.jcwhatever.nucleus.providers.npc.ai.INpcState;
 import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
+import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoalAgent;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -66,7 +67,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
     public static class SimpleWaypoints extends NpcTrait {
 
         private LinkedList<Location> _waypoints = new LinkedList<>();
-        private final NamedUpdateAgents _agents = new NamedUpdateAgents();
+        private final NamedUpdateAgents _subscriberAgents = new NamedUpdateAgents();
 
         private Location _current;
         private INpcGoal _waypointGoal;
@@ -122,7 +123,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         public SimpleWaypoints onFinish(IScriptUpdateSubscriber<INpc> subscriber) {
             PreCon.notNull(subscriber);
 
-            _agents.getAgent("onFinish").register(new ScriptUpdateSubscriber<>(subscriber));
+            _subscriberAgents.getAgent("onFinish").register(new ScriptUpdateSubscriber<>(subscriber));
 
             return this;
         }
@@ -167,7 +168,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         public void dispose() {
             stop();
             clear();
-            _agents.disposeAgents();
+            _subscriberAgents.disposeAgents();
             super.dispose();
         }
 
@@ -177,34 +178,53 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         private class WaypointGoal implements INpcGoal {
 
             @Override
-            public void reset() {
+            public void reset(INpcState state) {
                 _waypoints.clear();
             }
 
             @Override
-            public void run(INpcActionSelector selector) {
-
-                if (!getNpc().getNavigator().isRunning()) {
-
-                    next();
-
-                    if (_waypoints.isEmpty()) {
-                        _agents.update("onFinish", getNpc());
-
-                        selector.finish();
-                    }
-                }
-            }
-
-            @Override
-            public boolean canRun() {
-
+            public boolean canRun(INpcState state) {
                 if (_waypoints.isEmpty() && _current == null)
                     return false;
 
                 next();
 
                 return true;
+            }
+
+            @Override
+            public float getCost(INpcState state) {
+                return 1.0f;
+            }
+
+            @Override
+            public void pause(INpcState state) {
+                // do nothing
+            }
+
+            @Override
+            public void firstRun(INpcGoalAgent agent) {
+                // do nothing
+            }
+
+            @Override
+            public void run(INpcGoalAgent goalAgent) {
+                if (!getNpc().getNavigator().isRunning()) {
+
+                    if (_waypoints.isEmpty()) {
+                        _subscriberAgents.update("onFinish", getNpc());
+
+                        // check waypoints again in case more were added
+                        // by onFinish subscriber
+                        if (_waypoints.isEmpty())
+                            goalAgent.finish();
+                        else
+                            next();
+                    }
+                    else {
+                        next();
+                    }
+                }
             }
 
             private void next() {
