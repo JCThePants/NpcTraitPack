@@ -178,6 +178,11 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         private class WaypointGoal implements INpcGoal {
 
             @Override
+            public String getName() {
+                return "SimpleWaypoint";
+            }
+
+            @Override
             public void reset(INpcState state) {
                 _waypoints.clear();
             }
