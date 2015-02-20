@@ -215,7 +215,7 @@ public class AggressiveTrait extends NpcTraitType {
 
             navigator.setHostile(true).setTarget(target);
 
-            goals.pause();
+            goals.resume();
 
             return this;
         }
