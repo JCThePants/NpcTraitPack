@@ -72,6 +72,9 @@ public class LookingTrait extends NpcTraitType {
 
     public static class Looking extends NpcTrait implements Runnable {
 
+        private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
+        private static final Location TARGET_LOCATION = new Location(null, 0, 0, 0);
+
         private final Location _adjustedLocation = new Location(null, 0, 0, 0);
         private final Location _currentLook = new Location(null, 0, 0, 0);
         private final Location _talkNodLocation = new Location(null, 0, 0, 0);
@@ -300,7 +303,7 @@ public class LookingTrait extends NpcTraitType {
         private void lookAtEntity() {
 
             Entity entity = getEntity();
-            Location location = getNpc().getLocation();
+            Location location = getNpc().getLocation(NPC_LOCATION);
             assert location != null;
 
             if (entity == null ||
@@ -308,7 +311,7 @@ public class LookingTrait extends NpcTraitType {
                 return;
             }
 
-            if (entity.getLocation().distanceSquared(location) > 1) {
+            if (location.distanceSquared(entity.getLocation(TARGET_LOCATION)) > 1) {
 
                 Location finalLook = entity instanceof LivingEntity
                         ? ((LivingEntity) entity).getEyeLocation()
@@ -325,7 +328,7 @@ public class LookingTrait extends NpcTraitType {
 
         private void lookAtLocation() {
 
-            Location location = getNpc().getLocation();
+            Location location = getNpc().getLocation(NPC_LOCATION);
             assert location != null;
 
             if (_lookLocation == null ||
@@ -351,21 +354,23 @@ public class LookingTrait extends NpcTraitType {
 
             LivingEntity close = EntityUtils.getClosestLivingEntity(
                     npcEntity, _range, new IValidator<LivingEntity>() {
+
                         @Override
                         public boolean isValid(LivingEntity element) {
+
                             return element instanceof Player &&
                                     !provider.isNpc(element);
                         }
                     });
 
-            if (close != null && close.getLocation().distanceSquared(npcEntity.getLocation()) > 1) {
+            if (close != null && distanceSquared(close.getLocation(TARGET_LOCATION)) > 1) {
 
                 Location target = close.getLocation();
 
                 Location look = getNextLook(target, _currentLook, 5);
 
                 if (_isTalkNod)
-                    look = getTalkNodLocation(close.getLocation(), _currentLook, _talkNodLocation);
+                    look = getTalkNodLocation(TARGET_LOCATION, _currentLook, _talkNodLocation);
 
                 getNpc().lookTowards(look);
             }
@@ -422,6 +427,10 @@ public class LookingTrait extends NpcTraitType {
             }
 
             return LocationUtils.addNoise(_adjustedLocation, output, 0.2D, 0.4D, 0.2D);
+        }
+
+        private double distanceSquared(Location location) {
+            return getNpc().getLocation(NPC_LOCATION).distanceSquared(location);
         }
     }
 }
