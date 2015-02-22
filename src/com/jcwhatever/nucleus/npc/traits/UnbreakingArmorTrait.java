@@ -92,7 +92,7 @@ public class UnbreakingArmorTrait extends NpcTraitType {
 
             INpc npc = event.getNpc();
 
-            if (npc.getTraits().has(NpcTraitPack.getLookup("UnbreakingArmor"))) {
+            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup("UnbreakingArmor"))) {
 
                 Entity entity = event.getParentEvent().getEntity();
 

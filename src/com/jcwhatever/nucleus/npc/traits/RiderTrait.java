@@ -135,11 +135,22 @@ public class RiderTrait extends NpcTraitType {
 
         @Override
         public void onSpawn() {
-            mountCurrent();
+            if (isEnabled())
+                mountCurrent();
         }
 
         @Override
         public void onDespawn() {
+            dismountCurrent();
+        }
+
+        @Override
+        protected void onEnable() {
+            mountCurrent();
+        }
+
+        @Override
+        protected void onDisable() {
             dismountCurrent();
         }
 

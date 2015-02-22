@@ -57,7 +57,6 @@ public class FreezeHeightTrait extends NpcTraitType {
 
     public static class FreezeHeight extends NpcTrait implements Runnable {
 
-        private boolean _isEnabled;
         private double _y;
 
         /**
@@ -68,17 +67,6 @@ public class FreezeHeightTrait extends NpcTraitType {
          */
         FreezeHeight(INpc npc, NpcTraitType type) {
             super(npc, type);
-        }
-
-        public boolean isEnabled() {
-            return _isEnabled;
-        }
-
-        public FreezeHeight setEnabled(boolean isEnabled) {
-            _isEnabled = isEnabled;
-
-            setY();
-            return this;
         }
 
         @Override
@@ -93,8 +81,6 @@ public class FreezeHeightTrait extends NpcTraitType {
 
         @Override
         public void run() {
-            if (!_isEnabled || !getNpc().isSpawned())
-                return;
 
             Entity entity = getNpc().getEntity();
             assert entity != null;
@@ -112,6 +98,11 @@ public class FreezeHeightTrait extends NpcTraitType {
             }
 
             entity.setVelocity(vector);
+        }
+
+        @Override
+        protected void onEnable() {
+            setY();
         }
 
         private void setY() {

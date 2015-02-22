@@ -93,7 +93,7 @@ public class ProtectPassengerTrait extends NpcTraitType {
             if (vehicle == null)
                 return;
 
-            if (vehicle.getTraits().has("NpcTraitPack:ProtectPassenger")) {
+            if (vehicle.getTraits().isEnabled("NpcTraitPack:ProtectPassenger")) {
 
                 event.setCancelled(true);
                 event.getParentEvent().setDamage(0.0D);

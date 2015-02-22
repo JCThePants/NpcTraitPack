@@ -103,7 +103,7 @@ public class UnbreakingWeaponTrait extends NpcTraitType {
             if (npc == null)
                 return;
 
-            if (npc.getTraits().has(NpcTraitPack.getLookup("UnbreakingWeapon"))) {
+            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup("UnbreakingWeapon"))) {
                 ItemStackUtils.repair(((LivingEntity) damager).getEquipment().getItemInHand());
             }
         }

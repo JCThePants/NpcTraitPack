@@ -88,7 +88,7 @@ public class NoDropsTrait extends NpcTraitType {
 
             INpc npc = event.getNpc();
 
-            if (npc.getTraits().has("NpcTraitPack:NoDrops")) {
+            if (npc.getTraits().isEnabled("NpcTraitPack:NoDrops")) {
 
                 EntityDeathEvent deathEvent = event.getParentEvent();
 

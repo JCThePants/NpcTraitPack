@@ -73,7 +73,6 @@ public class AggressiveTrait extends NpcTraitType {
         private boolean _isWhitelist;
         private Set<Player> _filter;
         private LivingEntity _target;
-        private boolean _isEnabled = true;
 
         /**
          * Constructor.
@@ -85,22 +84,9 @@ public class AggressiveTrait extends NpcTraitType {
             super(npc, type);
         }
 
-        /**
-         * Determine if the trait is enabled.
-         */
-        public boolean isEnabled() {
-            return _isEnabled;
-        }
-
-        /**
-         * Set the enabled state.
-         *
-         * @param isEnabled  True to enable, otherwise false.
-         *
-         * @return  Self for chaining.
-         */
+        @Override
         public Aggressive setEnabled(boolean isEnabled) {
-            _isEnabled = isEnabled;
+            super.setEnabled(isEnabled);
 
             if (_target != null) {
                 getNpc().getNavigator().cancel();
@@ -236,9 +222,6 @@ public class AggressiveTrait extends NpcTraitType {
 
         @Override
         public void run() {
-
-            if (!_isEnabled || !getNpc().isSpawned())
-                return;
 
             if (_target == null || _target.isDead() || !_target.isValid()) {
 
