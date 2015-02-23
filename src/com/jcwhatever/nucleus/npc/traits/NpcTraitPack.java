@@ -27,6 +27,14 @@ package com.jcwhatever.nucleus.npc.traits;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.npc.traits.living.LivingEntityTraitType;
+import com.jcwhatever.nucleus.npc.traits.particles.EnderParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.ExplosionParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.FireParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.GlyphParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.HeartParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.RainbowDustParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.SmokeParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.particles.SprintDustParticlesTrait;
 import com.jcwhatever.nucleus.providers.npc.INpcProvider;
 import com.jcwhatever.nucleus.providers.npc.events.NpcCreateEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcEntityTypeChangeEvent;
@@ -94,6 +102,16 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                     .registerTrait(new SimpleWaypointsTrait())
                     .registerTrait(new UnbreakingArmorTrait())
                     .registerTrait(new UnbreakingWeaponTrait())
+
+                    // particle traits
+                    .registerTrait(new EnderParticlesTrait())
+                    .registerTrait(new ExplosionParticlesTrait())
+                    .registerTrait(new FireParticlesTrait())
+                    .registerTrait(new GlyphParticlesTrait())
+                    .registerTrait(new HeartParticlesTrait())
+                    .registerTrait(new RainbowDustParticlesTrait())
+                    .registerTrait(new SmokeParticlesTrait())
+                    .registerTrait(new SprintDustParticlesTrait())
 
                     // auto added traits
                     .registerTrait(new LivingEntityTraitType());
