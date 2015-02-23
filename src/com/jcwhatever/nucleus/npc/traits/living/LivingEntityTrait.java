@@ -28,7 +28,6 @@ import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
-import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.entity.EntityType;
@@ -281,62 +280,5 @@ public class LivingEntityTrait extends NpcTrait {
             return null;
 
         return (LivingEntity)getNpc().getEntity();
-    }
-
-    /**
-     * Get an enum from an object. The object must be an instance of the
-     * enum or the name of the enum.
-     *
-     * @param name       The enum constant name.
-     * @param enumClass  The enum class.
-     *
-     * @param <T>  The enum type.
-     *
-     * @return  The enum constant.
-     */
-    protected <T extends Enum> T getEnum(Object name, Class<T> enumClass) {
-
-        if (name instanceof String) {
-
-            T result = (T) EnumUtils.searchEnum((String) name, enumClass);
-            if (result == null)
-                throw new IllegalArgumentException("Invalid constant name for type: " + enumClass.getName());
-
-            return result;
-        }
-        else if (enumClass.isInstance(name)) {
-            return enumClass.cast(name);
-        }
-        else {
-            throw new IllegalArgumentException("Invalid type provided. Unable to convert to type: "
-                    + enumClass.getName());
-        }
-    }
-
-    /**
-     * Get a {@link org.bukkit.potion.PotionEffectType} from an object. The object must be
-     * an instance of {@link org.bukkit.potion.PotionEffectType} or the name of the type.
-     *
-     * @param object  The potion effect type or name.
-     *
-     * @return  The potion effect type.
-     */
-    protected PotionEffectType getPotionEffectType(Object object) {
-
-        if (object instanceof String) {
-            String name = ((String)object).toUpperCase();
-
-            PotionEffectType type = PotionEffectType.getByName(name);
-            if (type == null)
-                throw new IllegalArgumentException(name + " is not a valid PotionEffectType.");
-
-            return type;
-        }
-        else if (object instanceof PotionEffectType) {
-            return (PotionEffectType)object;
-        }
-        else {
-            throw new IllegalArgumentException("Expected PotionEffectType or name of type.");
-        }
     }
 }
