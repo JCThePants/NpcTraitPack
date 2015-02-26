@@ -189,12 +189,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
             @Override
             public boolean canRun(INpcState state) {
-                if (_waypoints.isEmpty() && _current == null)
-                    return false;
-
-                next();
-
-                return true;
+                return !_waypoints.isEmpty();
             }
 
             @Override
@@ -209,7 +204,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
             @Override
             public void firstRun(INpcGoalAgent agent) {
-                // do nothing
+                getNpc().getNavigator().cancel();
             }
 
             @Override
@@ -234,8 +229,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
             private void next() {
 
-                if (_current == null)
-                    _current = _waypoints.removeFirst();
+                _current = _waypoints.removeFirst();
 
                 getNpc().getNavigator().setTarget(_current);
                 getNpc().lookTowards(_current);
