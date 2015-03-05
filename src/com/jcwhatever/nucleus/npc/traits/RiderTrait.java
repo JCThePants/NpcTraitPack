@@ -173,7 +173,7 @@ public class RiderTrait extends NpcTraitType {
             Entity entity = _vehicle.getEntity();
             assert entity != null;
 
-            entity.setPassenger(null);
+            entity.eject();
 
             _vehicle.despawn();
         }
