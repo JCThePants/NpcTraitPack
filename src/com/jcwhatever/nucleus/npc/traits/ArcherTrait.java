@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.ProjectileUtils;
 import com.jcwhatever.nucleus.utils.Scheduler;
-import com.jcwhatever.nucleus.utils.scheduler.ScheduledTask;
+import com.jcwhatever.nucleus.utils.scheduler.IScheduledTask;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
@@ -62,7 +62,7 @@ public class ArcherTrait extends NpcTraitType {
 
     public static class Archer extends NpcTrait {
 
-        private ScheduledTask _task;
+        private IScheduledTask _task;
 
         /**
          * Constructor.
