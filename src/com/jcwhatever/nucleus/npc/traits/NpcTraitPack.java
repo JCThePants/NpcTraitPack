@@ -26,6 +26,7 @@ package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
+import com.jcwhatever.nucleus.npc.traits.flock.FlockingTrait;
 import com.jcwhatever.nucleus.npc.traits.living.LivingEntityTraitType;
 import com.jcwhatever.nucleus.npc.traits.particles.EnderParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.ExplosionParticlesTrait;
@@ -91,7 +92,6 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
         else {
 
             provider
-                    // manual add traits
                     .registerTrait(new AggressiveTrait())
                     .registerTrait(new ArcherTrait())
                     .registerTrait(new FreezeHeightTrait())
@@ -102,6 +102,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                     .registerTrait(new SimpleWaypointsTrait())
                     .registerTrait(new UnbreakingArmorTrait())
                     .registerTrait(new UnbreakingWeaponTrait())
+                    .registerTrait(new FlockingTrait())
 
                     // particle traits
                     .registerTrait(new EnderParticlesTrait())
