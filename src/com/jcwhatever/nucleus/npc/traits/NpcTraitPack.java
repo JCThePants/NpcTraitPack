@@ -28,6 +28,7 @@ import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.npc.traits.flock.FlockingTrait;
 import com.jcwhatever.nucleus.npc.traits.living.LivingEntityTraitType;
+import com.jcwhatever.nucleus.npc.traits.looking.LookingTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.EnderParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.ExplosionParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.FireParticlesTrait;
