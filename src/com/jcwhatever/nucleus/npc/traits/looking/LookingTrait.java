@@ -153,6 +153,22 @@ public class LookingTrait extends NpcTraitType {
         }
 
         /**
+         * Look casually at living entities that get within range.
+         *
+         * <p>Enables trait.</p>
+         *
+         * @return  Self for chaining.
+         */
+        public Looking lookCasual() {
+
+            _handler = new LookCasual(this);
+
+            setEnabled(true);
+
+            return this;
+        }
+
+        /**
          * Pause the trait without clearing the current look target.
          *
          * @return  Self for chaining.
