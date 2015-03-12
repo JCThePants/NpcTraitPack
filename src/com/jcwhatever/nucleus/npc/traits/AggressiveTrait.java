@@ -244,11 +244,11 @@ public class AggressiveTrait extends NpcTraitType {
                 setTarget(_target);
             }
 
-            getNpc().lookAt(_target);
+            getNpc().lookEntity(_target);
 
             INpc vehicle = getNpc().getNPCVehicle();
             if (vehicle != null) {
-                vehicle.lookAt(_target);
+                vehicle.lookEntity(_target);
             }
 
             if (!getNpc().getNavigator().isRunning()) {

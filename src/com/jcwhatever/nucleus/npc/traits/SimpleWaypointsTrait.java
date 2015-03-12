@@ -232,7 +232,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
                 _current = _waypoints.removeFirst();
 
                 getNpc().getNavigator().setTarget(_current);
-                getNpc().lookTowards(_current);
+                getNpc().lookLocation(_current);
             }
         }
     }

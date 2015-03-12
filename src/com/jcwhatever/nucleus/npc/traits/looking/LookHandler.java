@@ -114,7 +114,7 @@ public abstract class LookHandler implements Runnable {
         look = getNextLook(look, _currentLook, getLookSteps());
 
         // tell NP where to look
-        getNpc().lookTowards(look);
+        getNpc().lookLocation(look);
     }
 
     /**
