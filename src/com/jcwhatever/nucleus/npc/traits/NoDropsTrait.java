@@ -24,14 +24,14 @@
 
 package com.jcwhatever.nucleus.npc.traits;
 
-import com.jcwhatever.nucleus.Nucleus;
-import com.jcwhatever.nucleus.events.manager.EventMethod;
-import com.jcwhatever.nucleus.events.manager.IEventListener;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDeathEvent;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -57,7 +57,7 @@ public class NoDropsTrait extends NpcTraitType {
 
         if (_listener == null) {
             _listener = new EventListener();
-            Nucleus.getEventManager().register(_listener);
+            Bukkit.getPluginManager().registerEvents(_listener, getPlugin());
         }
 
         return new NoDrops(npc, this);
@@ -76,19 +76,14 @@ public class NoDropsTrait extends NpcTraitType {
         }
     }
 
-    private static class EventListener implements IEventListener {
+    private static class EventListener implements Listener {
 
-        @Override
-        public Plugin getPlugin() {
-            return NpcTraitPack.getPlugin();
-        }
-
-        @EventMethod
+        @EventHandler
         private void onDeath(NpcDeathEvent event) {
 
             INpc npc = event.getNpc();
 
-            if (npc.getTraits().isEnabled("NpcTraitPack:NoDrops")) {
+            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup("NoDrops"))) {
 
                 EntityDeathEvent deathEvent = event.getParentEvent();
 

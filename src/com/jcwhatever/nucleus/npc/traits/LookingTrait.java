@@ -101,6 +101,7 @@ public class LookingTrait extends NpcTraitType {
          *
          * <p>Disabled by default.</p>
          */
+        @Override
         public boolean isEnabled() {
             return _isEnabled;
         }
@@ -112,6 +113,7 @@ public class LookingTrait extends NpcTraitType {
          *
          * @return  Self for chaining.
          */
+        @Override
         public Looking setEnabled(boolean isEnabled) {
             if (_isEnabled == isEnabled)
                 return this;
