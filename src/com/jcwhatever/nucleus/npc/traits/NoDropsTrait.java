@@ -36,6 +36,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.plugin.Plugin;
 
 /**
+ * A trait that prevents the NPC from dropping its items when killed.
+ *
  * <p>Trait is registered with the lookup name "NpcTraitPack:NoDrops"</p>
  */
 public class NoDropsTrait extends NpcTraitType {

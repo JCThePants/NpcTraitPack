@@ -97,6 +97,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                     .registerTrait(new FreezeHeightTrait())
                     .registerTrait(new LookingTrait())
                     .registerTrait(new NoDropsTrait())
+                    .registerTrait(new PickupVictimDropsTrait())
                     .registerTrait(new ProtectPassengerTrait())
                     .registerTrait(new RiderTrait())
                     .registerTrait(new SimpleWaypointsTrait())
