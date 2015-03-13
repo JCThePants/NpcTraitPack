@@ -206,6 +206,6 @@ public abstract class LookHandler implements Runnable {
             _adjustedLocation.setZ(z);
         }
 
-        return LocationUtils.addNoise(_adjustedLocation, output, 0.2D, 0.4D, 0.2D);
+        return LocationUtils.addNoise(_adjustedLocation, 0.2D, 0.4D, 0.2D, output);
     }
 }
