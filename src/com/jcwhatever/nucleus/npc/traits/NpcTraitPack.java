@@ -29,6 +29,7 @@ import com.jcwhatever.nucleus.NucleusPlugin;
 import com.jcwhatever.nucleus.npc.traits.flock.FlockingTrait;
 import com.jcwhatever.nucleus.npc.traits.living.LivingEntityTraitType;
 import com.jcwhatever.nucleus.npc.traits.looking.LookingTrait;
+import com.jcwhatever.nucleus.npc.traits.nms.TraitNmsManager;
 import com.jcwhatever.nucleus.npc.traits.particles.EnderParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.ExplosionParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.FireParticlesTrait;
@@ -57,12 +58,18 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
 
     private static NpcTraitPack _instance;
 
+    private TraitNmsManager _nmsManager;
+
     public static NpcTraitPack getPlugin() {
         return _instance;
     }
 
     public static String getLookup(String name) {
         return getPlugin().getName() + ':' + name;
+    }
+
+    public static TraitNmsManager getNmsManager() {
+        return _instance._nmsManager;
     }
 
     @Override
@@ -83,6 +90,8 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
     @Override
     protected void onEnablePlugin() {
         _instance = this;
+
+        _nmsManager = new TraitNmsManager();
 
         INpcProvider provider = Nucleus.getProviderManager().getNpcProvider();
 
@@ -105,6 +114,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                     .registerTrait(new UnbreakingArmorTrait())
                     .registerTrait(new UnbreakingWeaponTrait())
                     .registerTrait(new FlockingTrait())
+                    .registerTrait(new SpigotActivatedTrait())
 
                     // particle traits
                     .registerTrait(new EnderParticlesTrait())
