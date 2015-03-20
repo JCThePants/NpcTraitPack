@@ -27,6 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.looking;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.npc.traits.looking.LookingTrait.Looking;
 import com.jcwhatever.nucleus.providers.npc.INpcProvider;
+import com.jcwhatever.nucleus.utils.NpcUtils;
 import com.jcwhatever.nucleus.utils.entity.EntityUtils;
 import com.jcwhatever.nucleus.utils.validate.IValidator;
 
@@ -35,6 +36,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.lang.ref.WeakReference;
 import javax.annotation.Nullable;
 
 /**
@@ -44,8 +46,17 @@ import javax.annotation.Nullable;
 public class LookClose extends LookHandler {
 
     private static final Location TARGET_LOCATION = new Location(null, 0, 0, 0);
+    private static final IValidator<LivingEntity> CLOSE_VALIDATOR = new IValidator<LivingEntity>() {
+        @Override
+        public boolean isValid(LivingEntity element) {
+            return element instanceof Player &&
+                    !NpcUtils.isNpc(element);
+        }
+    };
 
     private double _range = 5;
+    private WeakReference<Entity> _lookEntity;
+    private int _lookTicks = 0;
 
     /**
      * Constructor.
@@ -82,6 +93,18 @@ public class LookClose extends LookHandler {
     @Override
     protected Location getLookLocation(Location output) {
 
+        Entity current = currentEntity();
+        _lookTicks++;
+
+        if (current != null && _lookTicks < 5) {
+            return current.getLocation(output);
+        }
+        else if (_lookTicks < 5) {
+            return null;
+        }
+
+        _lookTicks = 0;
+
         Entity npcEntity = getNpc().getEntity();
         assert npcEntity != null;
 
@@ -89,20 +112,22 @@ public class LookClose extends LookHandler {
         assert provider != null;
 
         LivingEntity close = EntityUtils.getClosestLivingEntity(
-                npcEntity, _range, new IValidator<LivingEntity>() {
-
-                    @Override
-                    public boolean isValid(LivingEntity element) {
-
-                        return element instanceof Player &&
-                                !provider.isNpc(element);
-                    }
-                });
+                npcEntity, _range, CLOSE_VALIDATOR);
 
         if (close != null && distanceSquared(close.getLocation(TARGET_LOCATION)) > 1) {
+            _lookEntity = new WeakReference<Entity>(close);
             return close.getLocation(output);
         }
 
+        _lookEntity = null;
         return null;
+    }
+
+    @Nullable
+    private Entity currentEntity() {
+        if (_lookEntity == null)
+            return null;
+
+        return _lookEntity.get();
     }
 }
