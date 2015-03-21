@@ -25,7 +25,7 @@
 package com.jcwhatever.nucleus.npc.traits.looking;
 
 import com.jcwhatever.nucleus.npc.traits.looking.LookingTrait.Looking;
-import com.jcwhatever.nucleus.utils.LocationUtils;
+import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.nucleus.utils.entity.EntityUtils;
 
 import org.bukkit.Location;
