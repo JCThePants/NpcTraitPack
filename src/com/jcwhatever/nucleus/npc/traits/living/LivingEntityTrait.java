@@ -26,6 +26,7 @@ package com.jcwhatever.nucleus.npc.traits.living;
 
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -242,7 +243,7 @@ public class LivingEntityTrait extends NpcTrait {
     }
 
     @Override
-    public void onSpawn() {
+    public void onSpawn(NpcSpawnReason reason) {
 
         EntityType type = getNpc().getTraits().getType();
         if (type != getEntityType()) {
@@ -255,7 +256,7 @@ public class LivingEntityTrait extends NpcTrait {
             return;
         }
 
-        super.onSpawn();
+        super.onSpawn(reason);
 
         LivingEntity entity = getLivingEntity();
         assert entity != null;

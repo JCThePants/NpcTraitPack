@@ -25,6 +25,8 @@
 package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.ProjectileUtils;
@@ -80,18 +82,18 @@ public class ArcherTrait extends NpcTraitType {
         }
 
         @Override
-        public void onDespawn() {
+        public void onSpawn(NpcSpawnReason reason) {
+            runTask();
+        }
+
+        @Override
+        public void onDespawn(NpcDespawnReason reason) {
             stopTask();
         }
 
         @Override
         public void onRemove() {
             stopTask();
-        }
-
-        @Override
-        public void onSpawn() {
-            runTask();
         }
 
         private void runTask() {

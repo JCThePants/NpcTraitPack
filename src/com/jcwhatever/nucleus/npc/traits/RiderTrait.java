@@ -25,6 +25,8 @@
 package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -134,13 +136,13 @@ public class RiderTrait extends NpcTraitType {
         }
 
         @Override
-        public void onSpawn() {
+        public void onSpawn(NpcSpawnReason reason) {
             if (isEnabled())
                 mountCurrent();
         }
 
         @Override
-        public void onDespawn() {
+        public void onDespawn(NpcDespawnReason reason) {
             dismountCurrent();
         }
 

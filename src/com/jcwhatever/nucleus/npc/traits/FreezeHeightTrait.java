@@ -25,6 +25,7 @@
 package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
@@ -75,7 +76,7 @@ public class FreezeHeightTrait extends NpcTraitType {
         }
 
         @Override
-        public void onSpawn() {
+        public void onSpawn(NpcSpawnReason reason) {
             setY();
         }
 

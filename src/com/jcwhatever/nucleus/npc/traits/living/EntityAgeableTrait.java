@@ -25,6 +25,7 @@
 package com.jcwhatever.nucleus.npc.traits.living;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.entity.Ageable;
@@ -110,9 +111,9 @@ public class EntityAgeableTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn() {
+    public void onSpawn(NpcSpawnReason reason) {
 
-        super.onSpawn();
+        super.onSpawn(reason);
 
         if (isDisposed())
             return;

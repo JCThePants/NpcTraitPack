@@ -25,6 +25,7 @@
 package com.jcwhatever.nucleus.npc.traits.living;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
 
@@ -244,9 +245,9 @@ public class EntityHorseTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn() {
+    public void onSpawn(NpcSpawnReason reason) {
 
-        super.onSpawn();
+        super.onSpawn(reason);
 
         if (isDisposed())
             return;

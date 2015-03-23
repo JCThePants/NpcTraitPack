@@ -26,6 +26,8 @@ package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.npc.traits.nms.INmsSpigotActivationHandler;
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
+import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.Scheduler;
@@ -101,7 +103,7 @@ public class SpigotActivatedTrait extends NpcTraitType {
         }
 
         @Override
-        public void onSpawn() {
+        public void onSpawn(NpcSpawnReason reason) {
 
             Entity entity = getNpc().getEntity();
             if (entity != null)
@@ -109,7 +111,7 @@ public class SpigotActivatedTrait extends NpcTraitType {
         }
 
         @Override
-        public void onDespawn() {
+        public void onDespawn(NpcDespawnReason reason) {
 
             Entity entity = getNpc().getEntity();
             if (entity != null)
