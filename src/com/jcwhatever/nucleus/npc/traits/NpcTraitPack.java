@@ -115,6 +115,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                     .registerTrait(new UnbreakingWeaponTrait())
                     .registerTrait(new FlockingTrait())
                     .registerTrait(new SpigotActivatedTrait())
+                    .registerTrait(new ChunkLoaderTrait())
 
                     // particle traits
                     .registerTrait(new EnderParticlesTrait())
