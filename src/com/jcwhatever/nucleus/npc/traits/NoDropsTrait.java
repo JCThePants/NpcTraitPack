@@ -33,7 +33,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.plugin.Plugin;
 
 /**
  * A trait that prevents the NPC from dropping its items when killed.
@@ -42,16 +41,15 @@ import org.bukkit.plugin.Plugin;
  */
 public class NoDropsTrait extends NpcTraitType {
 
+    private static final String NAME = "NoDrops";
+
     private static EventListener _listener;
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "NoDrops";
+    /**
+     * Constructor.
+     */
+    public NoDropsTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override

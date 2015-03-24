@@ -32,7 +32,6 @@ import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nullable;
 
@@ -46,14 +45,11 @@ import javax.annotation.Nullable;
  */
 public class LookingTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "Looking";
+    /**
+     * Constructor.
+     */
+    public LookingTrait() {
+        super(NpcTraitPack.getPlugin(), "Looking");
     }
 
     @Override

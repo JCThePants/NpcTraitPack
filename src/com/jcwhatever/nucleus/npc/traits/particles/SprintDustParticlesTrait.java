@@ -32,21 +32,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Sprinting particles effect.
  */
 public class SprintDustParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "SprintDustParticles";
+    /**
+     * Constructor.
+     */
+    public SprintDustParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "SprintDustParticles");
     }
 
     @Override

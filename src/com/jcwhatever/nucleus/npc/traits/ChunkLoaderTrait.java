@@ -43,7 +43,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.plugin.Plugin;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,17 +55,16 @@ import java.util.Set;
  */
 public class ChunkLoaderTrait extends NpcTraitType {
 
+    private static final String NAME = "ChunkLoader";
+
     private static EventListener _listener;
     private static ElementCounter<Coords2Di> _keepLoaded = new ElementCounter<Coords2Di>(RemovalPolicy.REMOVE);
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "ChunkLoader";
+    /**
+     * Constructor.
+     */
+    public ChunkLoaderTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override
@@ -189,7 +187,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
             if (event.getReason() != NpcDespawnReason.CHUNK_UNLOAD)
                 return;
 
-            if (!event.getNpc().getTraits().has(NpcTraitPack.getLookup("ChunkLoader")))
+            if (!event.getNpc().getTraits().has(NpcTraitPack.getLookup(NAME)))
                 return;
 
             event.setCancelled(true);
@@ -211,7 +209,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
             if (npc == null)
                 return;
 
-            ChunkLoader trait = (ChunkLoader)npc.getTraits().get(NpcTraitPack.getLookup("ChunkLoader"));
+            ChunkLoader trait = (ChunkLoader)npc.getTraits().get(NpcTraitPack.getLookup(NAME));
             if (trait == null)
                 return;
 

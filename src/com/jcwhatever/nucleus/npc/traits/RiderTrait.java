@@ -34,7 +34,6 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nullable;
 
@@ -45,14 +44,13 @@ import javax.annotation.Nullable;
  */
 public class RiderTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
+    private static final String NAME = "Rider";
 
-    @Override
-    public String getName() {
-        return "Rider";
+    /**
+     * Constructor.
+     */
+    public RiderTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override

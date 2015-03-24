@@ -31,21 +31,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Ender particle effect.
  */
 public class EnderParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "EnderParticles";
+    /**
+     * Constructor.
+     */
+    public EnderParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "EnderParticles");
     }
 
     @Override

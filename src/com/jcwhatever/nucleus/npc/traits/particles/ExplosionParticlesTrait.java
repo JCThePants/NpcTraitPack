@@ -30,21 +30,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Explosion effect.
  */
 public class ExplosionParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "ExplosionParticles";
+    /**
+     * Constructor.
+     */
+    public ExplosionParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "ExplosionParticles");
     }
 
     @Override

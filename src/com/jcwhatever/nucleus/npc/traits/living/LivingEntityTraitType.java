@@ -31,21 +31,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
-import org.bukkit.plugin.Plugin;
 
 /**
  * The trait type for a living entity.
  */
 public class LivingEntityTraitType extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "LivingEntity";
+    /**
+     * Constructor.
+     */
+    public LivingEntityTraitType() {
+        super(NpcTraitPack.getPlugin(), "LivingEntity");
     }
 
     @Override

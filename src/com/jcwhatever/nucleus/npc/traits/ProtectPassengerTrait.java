@@ -32,7 +32,6 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 
 /**
  * When riding the NPC, the passenger is protected from damage.
@@ -41,16 +40,15 @@ import org.bukkit.plugin.Plugin;
  */
 public class ProtectPassengerTrait extends NpcTraitType {
 
+    private static final String NAME = "ProtectPassenger";
+
     private static EventListener _listener;
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "ProtectPassenger";
+    /**
+     * Constructor.
+     */
+    public ProtectPassengerTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override
@@ -88,7 +86,7 @@ public class ProtectPassengerTrait extends NpcTraitType {
             if (vehicle == null)
                 return;
 
-            if (vehicle.getTraits().isEnabled(NpcTraitPack.getLookup("ProtectPassenger"))) {
+            if (vehicle.getTraits().isEnabled(NpcTraitPack.getLookup(NAME))) {
 
                 event.setCancelled(true);
                 event.getParentEvent().setDamage(0.0D);

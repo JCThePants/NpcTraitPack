@@ -34,7 +34,6 @@ import com.jcwhatever.nucleus.utils.Scheduler;
 import com.jcwhatever.nucleus.utils.scheduler.IScheduledTask;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -47,14 +46,13 @@ import java.util.WeakHashMap;
  */
 public class SpigotActivatedTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
+    private static final String NAME = "SpigotActivated";
 
-    @Override
-    public String getName() {
-        return "SpigotActivated";
+    /**
+     * Constructor.
+     */
+    public SpigotActivatedTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override

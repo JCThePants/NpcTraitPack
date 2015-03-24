@@ -39,7 +39,6 @@ import com.jcwhatever.nucleus.utils.validate.IValidator;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Set;
 import javax.annotation.Nullable;
@@ -53,14 +52,13 @@ import javax.annotation.Nullable;
  */
 public class AggressiveTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
+    private static final String NAME = "Aggressive";
 
-    @Override
-    public String getName() {
-        return "Aggressive";
+    /**
+     * Constructor.
+     */
+    public AggressiveTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override

@@ -31,21 +31,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Floating Glyphs effect.
  */
 public class GlyphParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "GlyphParticles";
+    /**
+     * Constructor.
+     */
+    public GlyphParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "GlyphParticles");
     }
 
     @Override

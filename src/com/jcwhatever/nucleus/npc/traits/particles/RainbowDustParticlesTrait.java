@@ -31,21 +31,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Multicolored dust particles.
  */
 public class RainbowDustParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "RainbowDustParticles";
+    /**
+     * Constructor.
+     */
+    public RainbowDustParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "RainbowDustParticles");
     }
 
     @Override

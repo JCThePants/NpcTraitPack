@@ -32,21 +32,17 @@ import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Smoke particles effect.
  */
 public class SmokeParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "SmokeParticles";
+    /**
+     * Constructor.
+     */
+    public SmokeParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "SmokeParticles");
     }
 
     @Override

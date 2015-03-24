@@ -31,21 +31,17 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Fire effect.
  */
 public class FireParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "FireParticles";
+    /**
+     * Constructor.
+     */
+    public FireParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "FireParticles");
     }
 
     @Override

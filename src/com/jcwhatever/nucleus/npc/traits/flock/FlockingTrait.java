@@ -37,7 +37,6 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -56,14 +55,11 @@ public class FlockingTrait extends NpcTraitType {
         WHITELIST
     }
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "Flocking";
+    /**
+     * Constructor.
+     */
+    public FlockingTrait() {
+        super(NpcTraitPack.getPlugin(), "Flocking");
     }
 
     @Override

@@ -39,7 +39,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,16 +53,15 @@ import java.util.WeakHashMap;
  */
 public class PickupVictimDropsTrait extends NpcTraitType {
 
+    private static final String NAME = "PickupVictimDrops";
+
     private static EventListener _listener;
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "PickupVictimDrops";
+    /**
+     * Constructor.
+     */
+    public PickupVictimDropsTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override
@@ -172,7 +170,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
                 return;
             }
 
-            if (!npc.getTraits().isEnabled(NpcTraitPack.getLookup("PickupVictimDrops"))) {
+            if (!npc.getTraits().isEnabled(NpcTraitPack.getLookup(NAME))) {
                 _attackerMap.remove(entity);
                 return;
             }
@@ -189,7 +187,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
                 return;
 
             PickupVictimDrops trait = (PickupVictimDrops)killer.getTraits()
-                    .get(NpcTraitPack.getLookup("PickupVictimDrops"));
+                    .get(NpcTraitPack.getLookup(NAME));
 
             if (trait == null || !trait.isEnabled())
                 return;
@@ -209,7 +207,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
         private void onNpcDeath(NpcDeathEvent event) {
 
             PickupVictimDrops trait = (PickupVictimDrops)event.getNpc().getTraits()
-                    .get(NpcTraitPack.getLookup("PickupVictimDrops"));
+                    .get(NpcTraitPack.getLookup(NAME));
 
             if (trait == null || !trait.isEnabled())
                 return;

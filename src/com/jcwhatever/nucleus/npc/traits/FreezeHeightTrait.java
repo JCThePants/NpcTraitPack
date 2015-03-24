@@ -31,7 +31,6 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 /**
@@ -41,14 +40,13 @@ import org.bukkit.util.Vector;
  */
 public class FreezeHeightTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
+    private static final String NAME = "FreezeHeight";
 
-    @Override
-    public String getName() {
-        return "FreezeHeight";
+    /**
+     * Constructor.
+     */
+    public FreezeHeightTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override

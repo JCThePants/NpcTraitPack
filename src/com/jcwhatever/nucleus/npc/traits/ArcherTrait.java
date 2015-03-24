@@ -38,7 +38,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Causes the NPC to fire arrows at its current target of aggression.
@@ -47,14 +46,13 @@ import org.bukkit.plugin.Plugin;
  */
 public class ArcherTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
+    private static final String NAME = "Archer";
 
-    @Override
-    public String getName() {
-        return "Archer";
+    /**
+     * Constructor.
+     */
+    public ArcherTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override
@@ -149,5 +147,4 @@ public class ArcherTrait extends NpcTraitType {
             }
         }
     }
-
 }

@@ -38,7 +38,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.plugin.Plugin;
 
 /**
  * The weapon of the NPC does not take damage.
@@ -47,16 +46,15 @@ import org.bukkit.plugin.Plugin;
  */
 public class UnbreakingWeaponTrait extends NpcTraitType {
 
+    private static final String NAME = "UnbreakingWeapon";
+
     private EventListener _listener;
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "UnbreakingWeapon";
+    /**
+     * Constructor.
+     */
+    public UnbreakingWeaponTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override
@@ -99,10 +97,9 @@ public class UnbreakingWeaponTrait extends NpcTraitType {
             if (npc == null)
                 return;
 
-            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup("UnbreakingWeapon"))) {
+            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup(NAME))) {
                 ItemStackUtils.repair(((LivingEntity) damager).getEquipment().getItemInHand());
             }
         }
     }
-
 }

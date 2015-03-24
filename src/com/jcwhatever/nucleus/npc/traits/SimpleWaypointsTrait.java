@@ -36,7 +36,6 @@ import com.jcwhatever.nucleus.utils.observer.script.ScriptUpdateSubscriber;
 import com.jcwhatever.nucleus.utils.observer.update.NamedUpdateAgents;
 
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -49,14 +48,13 @@ import java.util.LinkedList;
  */
 public class SimpleWaypointsTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
+    public static final String NAME = "SimpleWaypoints";
 
-    @Override
-    public String getName() {
-        return "SimpleWaypoints";
+    /**
+     * Constructor.
+     */
+    public SimpleWaypointsTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override

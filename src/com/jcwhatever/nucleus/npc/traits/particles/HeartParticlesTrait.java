@@ -32,7 +32,6 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.entity.Wolf;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -41,14 +40,11 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class HeartParticlesTrait extends NpcTraitType {
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "HeartParticles";
+    /**
+     * Constructor.
+     */
+    public HeartParticlesTrait() {
+        super(NpcTraitPack.getPlugin(), "HeartParticles");
     }
 
     @Override

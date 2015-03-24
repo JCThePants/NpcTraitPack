@@ -35,7 +35,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 
 /**
  * Armor of the NPC does not take damage.
@@ -44,16 +43,15 @@ import org.bukkit.plugin.Plugin;
  */
 public class UnbreakingArmorTrait extends NpcTraitType {
 
+    private static final String NAME = "UnbreakingArmor";
+
     private EventListener _listener;
 
-    @Override
-    public Plugin getPlugin() {
-        return NpcTraitPack.getPlugin();
-    }
-
-    @Override
-    public String getName() {
-        return "UnbreakingArmor";
+    /**
+     * Constructor.
+     */
+    public UnbreakingArmorTrait() {
+        super(NpcTraitPack.getPlugin(), NAME);
     }
 
     @Override
@@ -87,7 +85,7 @@ public class UnbreakingArmorTrait extends NpcTraitType {
 
             INpc npc = event.getNpc();
 
-            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup("UnbreakingArmor"))) {
+            if (npc.getTraits().isEnabled(NpcTraitPack.getLookup(NAME))) {
 
                 Entity entity = event.getParentEvent().getEntity();
 
@@ -95,5 +93,4 @@ public class UnbreakingArmorTrait extends NpcTraitType {
             }
         }
     }
-
 }
