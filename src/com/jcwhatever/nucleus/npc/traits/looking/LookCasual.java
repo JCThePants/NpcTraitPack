@@ -127,64 +127,54 @@ public class LookCasual extends LookHandler {
     @Override
     protected Location getLookLocation(Location output) {
 
-        Entity close = getCurrentEntity();
+        Entity closestEntity = getCurrentEntity();
+        Location npcLocation = getNpc().getLocation(NPC_LOCATION);
 
         switch (_mode) {
             case NONE:
 
                 // delay to prevent excessive entity searching
-                if (_delayTicks > 0) {
-                    _delayTicks--;
+                if (isDelay())
                     return null;
-                }
-                else {
-                    _delayTicks = DELAY_TICKS;
-                }
 
-                close = getClosest();
-                if (close != null && !close.equals(getPreviousEntity())) {
+                closestEntity = getClosest();
 
-                    _previousEntity = new WeakReference<Entity>(close);
+                if (isNewEntity(closestEntity)) {
 
-                    Entity entity = getNpc().getEntity();
-                    assert entity != null;
+                    _previousEntity = new WeakReference<Entity>(closestEntity);
 
-                    Location startLocation = entity.getLocation(NPC_LOCATION);
+                    Entity npcEntity = getNpc().getEntity();
+                    assert npcEntity != null;
 
-                    if (_returnLook == null || _returnLook.isResettable) {
-                        LocationUtils.getYawLocation(startLocation, 3.0D, _startLook);
+                    if (isReturnLookStatic()) {
+                        LocationUtils.getYawLocation(npcLocation, 3.0D, _startLook);
 
-                        if (_returnLook == null) {
+                        if (_returnLook == null)
                             _returnLook = new ReturnLook(_startLook.getYaw(), _startLook.getPitch(), true);
-                        }
                     }
                     else {
-                        LocationUtils.getYawLocation(startLocation, 3.0D, _returnLook.yaw, _startLook);
+                        LocationUtils.getYawLocation(npcLocation, 3.0D, _returnLook.yaw, _startLook);
                     }
 
-                    _currentEntity = new WeakReference<Entity>(close);
+                    _currentEntity = new WeakReference<Entity>(closestEntity);
                     _startTime = System.currentTimeMillis();
                     _mode = Mode.LOOK_TOWARDS;
                 }
                 break;
 
             case LOOK_TOWARDS:
-                if (reset(close == null))
+                if (reset(closestEntity == null))
                     return null;
 
-                assert close != null;
+                assert closestEntity != null;
 
                 if (_startTime + LOOK_DURATION_MS > System.currentTimeMillis()) {
 
-                    Location target = close.getLocation(output);
-                    Location npcLocation = getNpc().getLocation(NPC_LOCATION);
-
-                    float angle = LocationUtils.getYawAngle(npcLocation, target);
-                    float startAngle = LocationUtils.getYawAngle(npcLocation, _startLook);
-                    float max = getMaxAngle(startAngle, angle);
+                    Location target = closestEntity.getLocation(output);
+                    float mcAngle = LocationUtils.getYawAngle(npcLocation, target);
 
                     return LocationUtils.getYawLocation(npcLocation,
-                            3, max, output);
+                            3, mcAngle, output);
 
                 } else {
                     _startTime = System.currentTimeMillis();
@@ -193,10 +183,10 @@ public class LookCasual extends LookHandler {
                 break;
 
             case LOOK_PAUSE:
-                if (reset(close == null))
+                if (reset(closestEntity == null))
                     return null;
 
-                assert close != null;
+                assert closestEntity != null;
 
                 if (_startTime + LOOK_DURATION_MS < System.currentTimeMillis()) {
                     _startTime = System.currentTimeMillis();
@@ -260,6 +250,25 @@ public class LookCasual extends LookHandler {
 
     private float getMaxAngle(float startAngle, float currentAngle) {
         return (float)(startAngle + (0.65 * (currentAngle - startAngle)));
+    }
+
+    private boolean isNewEntity(Entity closestEntity) {
+        return closestEntity != null && !closestEntity.equals(getPreviousEntity());
+    }
+
+    private boolean isReturnLookStatic() {
+        return _returnLook == null || _returnLook.isResettable;
+    }
+
+    private boolean isDelay() {
+        if (_delayTicks > 0) {
+            _delayTicks--;
+            return true;
+        }
+        else {
+            _delayTicks = DELAY_TICKS;
+            return false;
+        }
     }
 
     private enum Mode {
