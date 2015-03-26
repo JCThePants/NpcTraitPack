@@ -34,6 +34,7 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.NpcUtils;
+import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
 import com.jcwhatever.nucleus.utils.coords.Coords2Di;
 
 import org.bukkit.Bukkit;
@@ -59,7 +60,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
     private static final String NAME = "ChunkLoader";
 
     private static EventListener _listener;
-    private static ElementCounter<Coords2Di> _keepLoaded = new ElementCounter<Coords2Di>(RemovalPolicy.REMOVE);
+    private static ElementCounter<Coords2Di> _keepLoaded = new ElementCounter<>(RemovalPolicy.REMOVE);
 
     /**
      * Constructor.
@@ -78,8 +79,11 @@ public class ChunkLoaderTrait extends NpcTraitType {
         private static Location NPC_LOCATION = new Location(null, 0, 0, 0);
 
         private Coords2Di _current;
-        private Set<Coords2Di> _chunks;
+        private final Set<Coords2Di> _chunks = new HashSet<>(27);
         private int _radius = 0;
+
+        private final MutableCoords2Di _matcher = new MutableCoords2Di(0, 0);
+        private final MutableCoords2Di _chunkCoords = new MutableCoords2Di(0, 0);
 
         /**
          * Constructor.
@@ -111,7 +115,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
          */
         public ChunkLoader setRadius(int radius) {
             _radius = radius;
-            _chunks = null;
+            _current = null;
 
             return this;
         }
@@ -132,41 +136,36 @@ public class ChunkLoaderTrait extends NpcTraitType {
         @Override
         protected void onRun() {
 
-            Chunk chunk = getNpc().getLocation(NPC_LOCATION).getChunk();
+            Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+            MutableCoords2Di chunkCoord = Coords2Di.getChunkCoords(npcLocation, _chunkCoords);
 
             // check if NPC is still in same chunk
-            if (_current != null && _current.getX() == chunk.getX() &&
-                    _current.getZ() == chunk.getZ()) {
+            if (_current != null && _current.getX() == chunkCoord.getX() &&
+                    _current.getZ() == chunkCoord.getZ()) {
                 return;
             }
 
-            if (_chunks == null) {
-                int capacity = ((_radius * 2) + 1) * 3;
-                _chunks = new HashSet<>(
-                        (int) Math.ceil(capacity + (capacity * 0.75f)));
-            }
-            else {
-                clearChunks();
-            }
+            clearChunks();
 
-            int xStart = chunk.getX() - _radius;
-            int zStart = chunk.getZ() - _radius;
-            int xEnd = chunk.getX() + _radius;
-            int zEnd = chunk.getZ() + _radius;
+            int xStart = chunkCoord.getX() - _radius;
+            int zStart = chunkCoord.getZ() - _radius;
+            int xEnd = chunkCoord.getX() + _radius;
+            int zEnd = chunkCoord.getZ() + _radius;
 
             for (int x = xStart; x <= xEnd; x++) {
                 for (int z = zStart; z <= zEnd; z++) {
 
-                    Coords2Di coord = new Coords2Di(x, z);
+                    _matcher.setX(x);
+                    _matcher.setZ(z);
 
-                    // check contains to prevent causing the objects gc generation
-                    // to increment which will hold it longer
-                    if (!_chunks.contains(coord)) {
+                    if (!_chunks.contains(_matcher)) {
+
+                        Coords2Di coord = new Coords2Di(_matcher);
                         _chunks.add(coord);
                         _keepLoaded.add(coord);
                     }
 
-                    Chunk ch = chunk.getWorld().getChunkAt(x, z);
+                    Chunk ch = chunkCoord.getChunk(npcLocation.getWorld());
                     if (!ch.isLoaded())
                         ch.load();
                 }
@@ -174,7 +173,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         }
 
         private void clearChunks() {
-            if (_chunks == null)
+            if (_current == null)
                 return;
 
             for (Coords2Di coord : _chunks)
