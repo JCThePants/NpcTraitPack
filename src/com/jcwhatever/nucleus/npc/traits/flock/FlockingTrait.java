@@ -29,6 +29,7 @@ import com.jcwhatever.nucleus.npc.traits.flock.behaviours.Alignment;
 import com.jcwhatever.nucleus.npc.traits.flock.behaviours.Cohesion;
 import com.jcwhatever.nucleus.npc.traits.flock.behaviours.Separation;
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.NpcUtils;
@@ -67,7 +68,7 @@ public class FlockingTrait extends NpcTraitType {
         return new Flocking(npc, this);
     }
 
-    public static class Flocking extends NpcTrait implements Runnable {
+    public static class Flocking extends NpcRunnableTrait {
 
         private static final Location ENTITY_LOCATION = new Location(null, 0, 0, 0);
         private static final Location TARGET_LOCATION = new Location(null, 0, 0, 0);
@@ -80,9 +81,6 @@ public class FlockingTrait extends NpcTraitType {
         private Collection<INpc> _flockFilter;
         private NpcFilterPolicy _policy = NpcFilterPolicy.BLACKLIST;
 
-        private int _interval = 7;
-        private int _currentInterval = 7;
-
         /**
          * Constructor.
          *
@@ -91,6 +89,8 @@ public class FlockingTrait extends NpcTraitType {
          */
         protected Flocking(INpc npc, NpcTraitType type) {
             super(npc, type);
+
+            setInterval(7);
         }
 
         /**
@@ -194,42 +194,11 @@ public class FlockingTrait extends NpcTraitType {
             return this;
         }
 
-        /**
-         * Get the interval in ticks that the flocking behaviours are
-         * applied.
-         */
-        public int getInterval() {
-            return _interval;
-        }
-
-        /**
-         * Set the interval in ticks that the flocking behaviours are
-         * applied.
-         *
-         * @param interval  The interval in ticks.
-         *
-         * @return  Self for chaining.
-         */
-        public Flocking setInterval(int interval) {
-            PreCon.greaterThanZero(interval);
-
-            _interval = interval;
-
-            return this;
-        }
-
         @Override
-        public void run() {
+        protected void onRun() {
 
             if (!getNpc().getNavigator().isRunning())
                 return;
-
-            if (_currentInterval > 0) {
-                _currentInterval--;
-                return;
-            } else {
-                _currentInterval = _interval;
-            }
 
             if (!fillFlocks(_alignment, _cohesion, _separation, _behaviours))
                 return;

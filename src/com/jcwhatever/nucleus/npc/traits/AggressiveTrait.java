@@ -30,7 +30,7 @@ import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.INpcProvider;
 import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoals;
 import com.jcwhatever.nucleus.providers.npc.navigator.INpcNav;
-import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
+import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.entity.EntityUtils;
@@ -66,7 +66,7 @@ public class AggressiveTrait extends NpcTraitType {
         return new Aggressive(npc, this);
     }
 
-    public static class Aggressive extends NpcTrait implements Runnable {
+    public static class Aggressive extends NpcRunnableTrait {
 
         private boolean _isWhitelist;
         private Set<Player> _filter;
@@ -80,6 +80,8 @@ public class AggressiveTrait extends NpcTraitType {
          */
         Aggressive(INpc npc, NpcTraitType type) {
             super(npc, type);
+
+            setInterval(3);
         }
 
         @Override
@@ -219,7 +221,7 @@ public class AggressiveTrait extends NpcTraitType {
         }
 
         @Override
-        public void run() {
+        protected void onRun() {
 
             if (_target == null || _target.isDead() || !_target.isValid()) {
 

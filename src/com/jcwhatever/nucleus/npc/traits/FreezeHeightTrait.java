@@ -26,6 +26,7 @@ package com.jcwhatever.nucleus.npc.traits;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
+import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 
@@ -54,7 +55,7 @@ public class FreezeHeightTrait extends NpcTraitType {
         return new FreezeHeight(npc, this);
     }
 
-    public static class FreezeHeight extends NpcTrait implements Runnable {
+    public static class FreezeHeight extends NpcRunnableTrait {
 
         private double _y;
 
@@ -79,7 +80,7 @@ public class FreezeHeightTrait extends NpcTraitType {
         }
 
         @Override
-        public void run() {
+        protected void onRun() {
 
             Entity entity = getNpc().getEntity();
             assert entity != null;

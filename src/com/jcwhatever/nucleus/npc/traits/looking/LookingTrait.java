@@ -26,6 +26,7 @@ package com.jcwhatever.nucleus.npc.traits.looking;
 
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
@@ -57,7 +58,7 @@ public class LookingTrait extends NpcTraitType {
         return new Looking(npc, this);
     }
 
-    public static class Looking extends NpcTrait implements Runnable {
+    public static class Looking extends NpcRunnableTrait {
 
         private LookHandler _handler;
 
@@ -190,7 +191,7 @@ public class LookingTrait extends NpcTraitType {
         }
 
         @Override
-        public void run() {
+        protected void onRun() {
 
             if (_handler == null)
                 return;

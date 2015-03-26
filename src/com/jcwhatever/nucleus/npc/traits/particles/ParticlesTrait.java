@@ -25,10 +25,9 @@
 package com.jcwhatever.nucleus.npc.traits.particles;
 
 import com.jcwhatever.nucleus.providers.npc.INpc;
-import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
+import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.Rand;
 
 import org.bukkit.Location;
 
@@ -36,13 +35,11 @@ import org.bukkit.Location;
  * Abstract implementation of a trait that applies a particle effect
  * to an NPC.
  */
-public abstract class ParticlesTrait extends NpcTrait implements Runnable {
+public abstract class ParticlesTrait extends NpcRunnableTrait {
 
     private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
 
-    private int _interval = 1;
     private float _chance = 0.3f;
-    private int _currentTick = 0;
     private int _runCount = -1;
     private int _currentRunCount = 0;
     private int _height = 1;
@@ -56,26 +53,6 @@ public abstract class ParticlesTrait extends NpcTrait implements Runnable {
      */
     protected ParticlesTrait(INpc npc, NpcTraitType type) {
         super(npc, type);
-    }
-
-    /**
-     * Get the interval the effect is played at.
-     */
-    public int getInterval() {
-        return _interval;
-    }
-
-    /**
-     * Set the interval the effect is played at.
-     *
-     * @param interval  The interval in ticks.
-     *
-     * @return  Self for chaining.
-     */
-    public ParticlesTrait setInterval(int interval) {
-        _interval = interval;
-
-        return this;
     }
 
     /**
@@ -180,9 +157,7 @@ public abstract class ParticlesTrait extends NpcTrait implements Runnable {
     }
 
     @Override
-    public void run() {
-        if (!canIntervalRun())
-            return;
+    protected void onRun() {
 
         Location location = getNpc().getLocation(NPC_LOCATION);
         location.add(0, _verticalOffset, 0);
@@ -208,15 +183,4 @@ public abstract class ParticlesTrait extends NpcTrait implements Runnable {
      * @param location  The location the effect should be played at.
      */
     protected abstract void onEffect(Location location);
-
-    private boolean canIntervalRun() {
-        _currentTick++;
-
-        if (_currentTick < _interval)
-            return false;
-
-        _currentTick = 0;
-
-        return _chance >= 1.0f || Rand.chance((int) (_chance * 100));
-    }
 }
