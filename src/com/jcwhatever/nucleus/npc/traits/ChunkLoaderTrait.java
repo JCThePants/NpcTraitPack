@@ -30,6 +30,7 @@ import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
+import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.NpcUtils;
@@ -72,7 +73,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         return new ChunkLoader(npc, this);
     }
 
-    public static class ChunkLoader extends NpcTrait implements Runnable {
+    public static class ChunkLoader extends NpcRunnableTrait {
 
         private static Location NPC_LOCATION = new Location(null, 0, 0, 0);
 
@@ -88,6 +89,8 @@ public class ChunkLoaderTrait extends NpcTraitType {
          */
         ChunkLoader(INpc npc, NpcTraitType type) {
             super(npc, type);
+
+            setInterval(5);
         }
 
         /**
@@ -127,7 +130,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         }
 
         @Override
-        public void run() {
+        protected void onRun() {
 
             Chunk chunk = getNpc().getLocation(NPC_LOCATION).getChunk();
 
@@ -155,8 +158,13 @@ public class ChunkLoaderTrait extends NpcTraitType {
                 for (int z = zStart; z <= zEnd; z++) {
 
                     Coords2Di coord = new Coords2Di(x, z);
-                    _chunks.add(coord);
-                    _keepLoaded.add(coord);
+
+                    // check contains to prevent causing the objects gc generation
+                    // to increment which will hold it longer
+                    if (!_chunks.contains(coord)) {
+                        _chunks.add(coord);
+                        _keepLoaded.add(coord);
+                    }
 
                     Chunk ch = chunk.getWorld().getChunkAt(x, z);
                     if (!ch.isLoaded())
