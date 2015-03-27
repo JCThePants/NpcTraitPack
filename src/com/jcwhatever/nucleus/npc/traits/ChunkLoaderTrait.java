@@ -71,7 +71,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new ChunkLoader(npc, this);
+        return new ChunkLoader(this);
     }
 
     public static class ChunkLoader extends NpcRunnableTrait {
@@ -88,11 +88,10 @@ public class ChunkLoaderTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        ChunkLoader(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        ChunkLoader(NpcTraitType type) {
+            super(type);
         }
 
         /**
@@ -119,7 +118,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         }
 
         @Override
-        public void onSpawn(NpcSpawnReason reason) {
+        protected void onSpawn(NpcSpawnReason reason) {
             if (_listener == null) {
                 _listener = new EventListener();
                 Bukkit.getPluginManager().registerEvents(_listener, NpcTraitPack.getPlugin());
@@ -127,8 +126,15 @@ public class ChunkLoaderTrait extends NpcTraitType {
         }
 
         @Override
-        public void onDespawn(NpcDespawnReason reason) {
+        protected void onDespawn(NpcDespawnReason reason) {
             clearChunks();
+        }
+
+        @Override
+        protected void onRemove() {
+            // prep for reuse
+            _chunks.clear();
+            _current = null;
         }
 
         @Override

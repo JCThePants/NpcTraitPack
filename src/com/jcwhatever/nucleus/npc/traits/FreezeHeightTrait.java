@@ -52,7 +52,7 @@ public class FreezeHeightTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new FreezeHeight(npc, this);
+        return new FreezeHeight(this);
     }
 
     public static class FreezeHeight extends NpcRunnableTrait {
@@ -62,20 +62,19 @@ public class FreezeHeightTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        FreezeHeight(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        FreezeHeight(NpcTraitType type) {
+            super(type);
         }
 
         @Override
-        public void onAdd() {
+        protected void onAdd(INpc npc) {
             setY();
         }
 
         @Override
-        public void onSpawn(NpcSpawnReason reason) {
+        protected void onSpawn(NpcSpawnReason reason) {
             setY();
         }
 

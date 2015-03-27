@@ -65,7 +65,7 @@ public class FlockingTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new Flocking(npc, this);
+        return new Flocking(this);
     }
 
     public static class Flocking extends NpcRunnableTrait {
@@ -73,24 +73,34 @@ public class FlockingTrait extends NpcTraitType {
         private static final Location ENTITY_LOCATION = new Location(null, 0, 0, 0);
         private static final Location TARGET_LOCATION = new Location(null, 0, 0, 0);
 
-        private final Alignment _alignment = new Alignment();
-        private final Cohesion _cohesion = new Cohesion();
-        private final Separation _separation = new Separation();
+        private Alignment _alignment;
+        private Cohesion _cohesion;
+        private Separation _separation;
         private List<IFlockBehaviour> _behaviours;
-
         private Collection<INpc> _flockFilter;
-        private NpcFilterPolicy _policy = NpcFilterPolicy.BLACKLIST;
+        private NpcFilterPolicy _policy;
 
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected Flocking(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected Flocking(NpcTraitType type) {
+            super(type);
+        }
+
+        @Override
+        protected void onAdd(INpc npc) {
 
             setInterval(7);
+
+            _alignment = new Alignment();
+            _cohesion = new Cohesion();
+            _separation = new Separation();
+
+            _behaviours = null;
+            _flockFilter = null;
+            _policy = NpcFilterPolicy.BLACKLIST;
         }
 
         /**

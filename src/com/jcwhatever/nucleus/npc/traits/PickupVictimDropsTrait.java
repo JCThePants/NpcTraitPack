@@ -72,7 +72,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
             Bukkit.getPluginManager().registerEvents(_listener, getPlugin());
         }
 
-        return new PickupVictimDrops(npc, this);
+        return new PickupVictimDrops(this);
     }
 
     public static class PickupVictimDrops extends NpcTrait {
@@ -84,11 +84,10 @@ public class PickupVictimDropsTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        PickupVictimDrops(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        PickupVictimDrops(NpcTraitType type) {
+            super(type);
         }
 
         /**
@@ -144,6 +143,14 @@ public class PickupVictimDropsTrait extends NpcTraitType {
                 _pickedUp = new ArrayList<>(15);
 
             return _pickedUp;
+        }
+
+        @Override
+        protected void onRemove() {
+            // prep for reuse
+            _pickedUp = null;
+            _isItemsDropped = false;
+            _isXpPickedUp = true;
         }
     }
 

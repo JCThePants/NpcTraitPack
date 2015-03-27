@@ -44,22 +44,21 @@ import javax.annotation.Nullable;
  */
 public class EntityHorseTrait extends LivingEntityTrait {
 
-    private Horse.Color _color = Horse.Color.WHITE;
-    private Horse.Style _style = Style.NONE;
-    private Horse.Variant _variant = Variant.HORSE;
-    private int _domestication = 20;
-    private int _maxDomestication = 20;
+    private Horse.Color _color;
+    private Horse.Style _style;
+    private Horse.Variant _variant;
+    private int _domestication;
+    private int _maxDomestication;
     private double _jumpStrength;
     private boolean _isCarryingChest;
 
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityHorseTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.HORSE);
+    EntityHorseTrait(NpcTraitType type) {
+        super(type, EntityType.HORSE);
     }
 
     /**
@@ -245,7 +244,20 @@ public class EntityHorseTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _color = Horse.Color.WHITE;
+        _style = Style.NONE;
+        _variant = Variant.HORSE;
+        _domestication = 20;
+        _maxDomestication = 20;
+        _jumpStrength = 1.0D;
+        _isCarryingChest = false;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

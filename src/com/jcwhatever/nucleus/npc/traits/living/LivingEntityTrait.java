@@ -62,17 +62,25 @@ public class LivingEntityTrait extends NpcTrait {
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    LivingEntityTrait(INpc npc, NpcTraitType type, EntityType entityType) {
-        super(npc, type);
+    LivingEntityTrait(NpcTraitType type, EntityType entityType) {
+        super(type);
 
         PreCon.notNull(entityType);
 
         _entityType = entityType;
     }
 
+    @Override
+    public boolean isReusable() {
+        return false;
+    }
+
+    /**
+     * Get the NPC {@link org.bukkit.entity.EntityType} the trait was
+     * instantiated for.
+     */
     public EntityType getEntityType() {
         return _entityType;
     }
@@ -243,7 +251,18 @@ public class LivingEntityTrait extends NpcTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _potions.clear();
+        _canPickupItems = false;
+        _maxAir = 20;
+        _maxHealth = 20.0D;
+        _health = 20.0D;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         EntityType type = getNpc().getTraits().getType();
         if (type != getEntityType()) {

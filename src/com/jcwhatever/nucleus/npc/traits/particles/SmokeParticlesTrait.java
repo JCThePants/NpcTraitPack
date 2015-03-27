@@ -47,7 +47,7 @@ public class SmokeParticlesTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new SmokeParticles(npc, this);
+        return new SmokeParticles(this);
     }
 
     public static class SmokeParticles extends ParticlesTrait {
@@ -57,11 +57,10 @@ public class SmokeParticlesTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected SmokeParticles(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected SmokeParticles(NpcTraitType type) {
+            super(type);
         }
 
         /**

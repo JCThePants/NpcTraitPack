@@ -49,7 +49,7 @@ public class HeartParticlesTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new HeartParticles(npc, this);
+        return new HeartParticles(this);
     }
 
     public static class HeartParticles extends ParticlesTrait {
@@ -59,11 +59,17 @@ public class HeartParticlesTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected HeartParticles(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected HeartParticles(NpcTraitType type) {
+            super(type);
+        }
+
+        @Override
+        protected void onAdd(INpc npc) {
+            super.onAdd(npc);
+
+            _heartsWolf = null;
         }
 
         @Override

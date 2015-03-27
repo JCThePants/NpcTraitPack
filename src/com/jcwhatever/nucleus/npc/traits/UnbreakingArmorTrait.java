@@ -62,7 +62,7 @@ public class UnbreakingArmorTrait extends NpcTraitType {
             Bukkit.getPluginManager().registerEvents(_listener, getPlugin());
         }
 
-        return new UnbreakingArmor(npc, this);
+        return new UnbreakingArmor(this);
     }
 
     public static class UnbreakingArmor extends NpcTrait {
@@ -70,11 +70,10 @@ public class UnbreakingArmorTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        UnbreakingArmor(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        UnbreakingArmor(NpcTraitType type) {
+            super(type);
         }
     }
 

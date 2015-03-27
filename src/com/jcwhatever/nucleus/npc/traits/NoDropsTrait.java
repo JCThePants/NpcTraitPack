@@ -60,7 +60,7 @@ public class NoDropsTrait extends NpcTraitType {
             Bukkit.getPluginManager().registerEvents(_listener, getPlugin());
         }
 
-        return new NoDrops(npc, this);
+        return new NoDrops(this);
     }
 
     public static class NoDrops extends NpcTrait {
@@ -68,11 +68,10 @@ public class NoDropsTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        NoDrops(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        NoDrops(NpcTraitType type) {
+            super(type);
         }
     }
 

@@ -46,7 +46,7 @@ public class EnderParticlesTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new EnderParticles(npc, this);
+        return new EnderParticles(this);
     }
 
     public static class EnderParticles extends ParticlesTrait {
@@ -54,11 +54,10 @@ public class EnderParticlesTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected EnderParticles(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected EnderParticles(NpcTraitType type) {
+            super(type);
         }
 
         @Override

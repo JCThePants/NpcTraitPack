@@ -39,20 +39,19 @@ public abstract class ParticlesTrait extends NpcRunnableTrait {
 
     private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
 
-    private float _chance = 0.3f;
-    private int _runCount = -1;
-    private int _currentRunCount = 0;
-    private int _height = 1;
-    private int _verticalOffset = 0;
+    private float _chance;
+    private int _runCount;
+    private int _currentRunCount;
+    private int _height;
+    private int _verticalOffset;
 
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    protected ParticlesTrait(INpc npc, NpcTraitType type) {
-        super(npc, type);
+    protected ParticlesTrait(NpcTraitType type) {
+        super(type);
     }
 
     /**
@@ -183,4 +182,13 @@ public abstract class ParticlesTrait extends NpcRunnableTrait {
      * @param location  The location the effect should be played at.
      */
     protected abstract void onEffect(Location location);
+
+    @Override
+    protected void onAdd(INpc npc) {
+        _chance = 0.3f;
+        _runCount = -1;
+        _currentRunCount = 0;
+        _height = 1;
+        _verticalOffset = 0;
+    }
 }

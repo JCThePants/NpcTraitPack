@@ -43,16 +43,15 @@ import javax.annotation.Nullable;
  */
 public class EntityVillagerTrait extends EntityAgeableTrait {
 
-    private Villager.Profession _profession = Profession.FARMER;
+    private Villager.Profession _profession;
 
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityVillagerTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.VILLAGER);
+    EntityVillagerTrait(NpcTraitType type) {
+        super(type, EntityType.VILLAGER);
     }
 
     /**
@@ -86,7 +85,14 @@ public class EntityVillagerTrait extends EntityAgeableTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _profession = Profession.FARMER;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

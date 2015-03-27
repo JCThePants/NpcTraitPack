@@ -50,11 +50,10 @@ public class EntityWolfTrait extends EntityAgeableTrait {
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityWolfTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.WOLF);
+    EntityWolfTrait(NpcTraitType type) {
+        super(type, EntityType.WOLF);
     }
 
     /**
@@ -162,7 +161,17 @@ public class EntityWolfTrait extends EntityAgeableTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _collarColor = DyeColor.RED;
+        _isAngry = false;
+        _isSitting = false;
+        _isTame = false;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

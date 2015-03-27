@@ -46,7 +46,7 @@ public class GlyphParticlesTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new GlyphParticles(npc, this);
+        return new GlyphParticles(this);
     }
 
     public static class GlyphParticles extends ParticlesTrait {
@@ -54,11 +54,10 @@ public class GlyphParticlesTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected GlyphParticles(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected GlyphParticles(NpcTraitType type) {
+            super(type);
         }
 
         @Override

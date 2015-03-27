@@ -59,7 +59,7 @@ public class ProtectPassengerTrait extends NpcTraitType {
             Bukkit.getPluginManager().registerEvents(_listener, getPlugin());
         }
 
-        return new ProtectPassenger(npc, this);
+        return new ProtectPassenger(this);
     }
 
     public static class ProtectPassenger extends NpcTrait {
@@ -67,11 +67,10 @@ public class ProtectPassengerTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        ProtectPassenger(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        ProtectPassenger(NpcTraitType type) {
+            super(type);
         }
     }
 

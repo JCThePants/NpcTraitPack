@@ -46,11 +46,10 @@ public class EntitySlimeTrait extends LivingEntityTrait {
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntitySlimeTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.SLIME);
+    EntitySlimeTrait(NpcTraitType type) {
+        super(type, EntityType.SLIME);
     }
 
     /**
@@ -79,7 +78,14 @@ public class EntitySlimeTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _size = 0;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

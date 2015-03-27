@@ -46,7 +46,7 @@ public class RainbowDustParticlesTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new DustParticles(npc, this);
+        return new DustParticles(this);
     }
 
     public static class DustParticles extends ParticlesTrait {
@@ -54,11 +54,10 @@ public class RainbowDustParticlesTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected DustParticles(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected DustParticles(NpcTraitType type) {
+            super(type);
         }
 
         @Override

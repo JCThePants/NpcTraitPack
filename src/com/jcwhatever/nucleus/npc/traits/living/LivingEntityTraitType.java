@@ -51,28 +51,28 @@ public class LivingEntityTraitType extends NpcTraitType {
 
         switch (type) {
             case HORSE:
-                return new EntityHorseTrait(npc, this);
+                return new EntityHorseTrait(this);
             case CREEPER:
-                return new EntityCreeperTrait(npc, this);
+                return new EntityCreeperTrait(this);
             case OCELOT:
-                return new EntityOcelotTrait(npc, this);
+                return new EntityOcelotTrait(this);
             case PIG_ZOMBIE:
-                return new EntityPigZombieTrait(npc, this);
+                return new EntityPigZombieTrait(this);
             case SHEEP:
-                return new EntitySheepTrait(npc, this);
+                return new EntitySheepTrait(this);
             case SLIME:
-                return new EntitySlimeTrait(npc, this);
+                return new EntitySlimeTrait(this);
             case VILLAGER:
-                return new EntityVillagerTrait(npc, this);
+                return new EntityVillagerTrait(this);
             case WOLF:
-                return new EntityWolfTrait(npc, this);
+                return new EntityWolfTrait(this);
             case ZOMBIE:
-                return new EntityZombieTrait(npc, this);
+                return new EntityZombieTrait(this);
         }
 
         if (Ageable.class.isAssignableFrom(type.getEntityClass()))
-            return new EntityAgeableTrait(npc, this, type);
+            return new EntityAgeableTrait(this, type);
 
-        return new LivingEntityTrait(npc, this, type);
+        return new LivingEntityTrait(this, type);
     }
 }

@@ -57,7 +57,7 @@ public class SpigotActivatedTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new SpigotActivated(npc, this);
+        return new SpigotActivated(this);
     }
 
     public static class SpigotActivated extends NpcTrait {
@@ -68,11 +68,10 @@ public class SpigotActivatedTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc   The NPC the trait is for.
          * @param type  The parent type that instantiated the trait.
          */
-        public SpigotActivated(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        public SpigotActivated(NpcTraitType type) {
+            super(type);
 
             if (_task == null) {
 
@@ -101,7 +100,7 @@ public class SpigotActivatedTrait extends NpcTraitType {
         }
 
         @Override
-        public void onSpawn(NpcSpawnReason reason) {
+        protected void onSpawn(NpcSpawnReason reason) {
 
             Entity entity = getNpc().getEntity();
             if (entity != null)
@@ -109,7 +108,7 @@ public class SpigotActivatedTrait extends NpcTraitType {
         }
 
         @Override
-        public void onDespawn(NpcDespawnReason reason) {
+        protected void onDespawn(NpcDespawnReason reason) {
 
             Entity entity = getNpc().getEntity();
             if (entity != null)

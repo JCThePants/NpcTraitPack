@@ -59,7 +59,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new SimpleWaypoints(npc, this);
+        return new SimpleWaypoints(this);
     }
 
     public static class SimpleWaypoints extends NpcTrait {
@@ -73,11 +73,10 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        SimpleWaypoints(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        SimpleWaypoints(NpcTraitType type) {
+            super(type);
         }
 
         /**
@@ -163,11 +162,16 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         }
 
         @Override
-        public void dispose() {
+        protected void onRemove() {
+            stop();
+            clear();
+        }
+
+        @Override
+        protected void onDispose() {
             stop();
             clear();
             _subscriberAgents.disposeAgents();
-            super.dispose();
         }
 
         /**

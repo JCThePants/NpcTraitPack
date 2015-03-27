@@ -46,11 +46,10 @@ public class EntityCreeperTrait extends LivingEntityTrait {
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityCreeperTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.CREEPER);
+    EntityCreeperTrait(NpcTraitType type) {
+        super(type, EntityType.CREEPER);
     }
 
     /**
@@ -80,7 +79,14 @@ public class EntityCreeperTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _isPowered = false;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

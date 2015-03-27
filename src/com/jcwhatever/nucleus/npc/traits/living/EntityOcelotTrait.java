@@ -43,17 +43,16 @@ import javax.annotation.Nullable;
  */
 public class EntityOcelotTrait extends EntityAgeableTrait {
 
-    private Ocelot.Type _type = Type.WILD_OCELOT;
+    private Ocelot.Type _type;
     private boolean _isSitting;
 
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityOcelotTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.OCELOT);
+    EntityOcelotTrait(NpcTraitType type) {
+        super(type, EntityType.OCELOT);
     }
 
     /**
@@ -112,7 +111,15 @@ public class EntityOcelotTrait extends EntityAgeableTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _type = Type.WILD_OCELOT;
+        _isSitting = false;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

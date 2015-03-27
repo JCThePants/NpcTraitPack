@@ -47,11 +47,10 @@ public class EntityZombieTrait extends LivingEntityTrait {
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityZombieTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.ZOMBIE);
+    EntityZombieTrait(NpcTraitType type) {
+        super(type, EntityType.ZOMBIE);
     }
 
     /**
@@ -107,7 +106,15 @@ public class EntityZombieTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _isBaby = false;
+        _isVillager = false;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

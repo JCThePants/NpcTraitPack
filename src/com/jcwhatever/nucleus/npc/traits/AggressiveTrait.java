@@ -63,7 +63,7 @@ public class AggressiveTrait extends NpcTraitType {
 
     @Override
     protected Aggressive createTrait(INpc npc) {
-        return new Aggressive(npc, this);
+        return new Aggressive(this);
     }
 
     public static class Aggressive extends NpcRunnableTrait {
@@ -75,13 +75,10 @@ public class AggressiveTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc   The NPC the trait is for.
          * @param type  The parent type that instantiated the trait.
          */
-        Aggressive(INpc npc, NpcTraitType type) {
-            super(npc, type);
-
-            setInterval(3);
+        Aggressive(NpcTraitType type) {
+            super(type);
         }
 
         @Override
@@ -218,6 +215,18 @@ public class AggressiveTrait extends NpcTraitType {
                 return null;
 
             return getNpc().getNavigator().getTargetEntity();
+        }
+
+        @Override
+        protected void onAdd(INpc npc) {
+            setInterval(3);
+        }
+
+        @Override
+        protected void onRemove() {
+            // prep for reuse
+            _filter = null;
+            _target = null;
         }
 
         @Override

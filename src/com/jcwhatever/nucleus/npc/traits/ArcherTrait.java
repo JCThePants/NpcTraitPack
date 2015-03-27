@@ -57,7 +57,7 @@ public class ArcherTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new Archer(npc, this);
+        return new Archer(this);
     }
 
     public static class Archer extends NpcTrait {
@@ -67,30 +67,29 @@ public class ArcherTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc   The NPC the trait is for.
          * @param type  The parent type that instantiated the trait.
          */
-        Archer(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        Archer(NpcTraitType type) {
+            super(type);
         }
 
         @Override
-        public void onAdd() {
+        protected void onAdd(INpc npc) {
             runTask();
         }
 
         @Override
-        public void onSpawn(NpcSpawnReason reason) {
+        protected void onSpawn(NpcSpawnReason reason) {
             runTask();
         }
 
         @Override
-        public void onDespawn(NpcDespawnReason reason) {
+        protected void onDespawn(NpcDespawnReason reason) {
             stopTask();
         }
 
         @Override
-        public void onRemove() {
+        protected void onRemove() {
             stopTask();
         }
 

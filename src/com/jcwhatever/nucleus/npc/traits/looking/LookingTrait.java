@@ -55,7 +55,7 @@ public class LookingTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new Looking(npc, this);
+        return new Looking(this);
     }
 
     public static class Looking extends NpcRunnableTrait {
@@ -65,11 +65,10 @@ public class LookingTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc      The NPC the trait is for.
          * @param type     The parent type that instantiated the trait.
          */
-        Looking(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        Looking(NpcTraitType type) {
+            super(type);
         }
 
         /**
@@ -188,6 +187,11 @@ public class LookingTrait extends NpcTraitType {
             setEnabled(false);
 
             return this;
+        }
+
+        @Override
+        protected void onAdd(INpc npc) {
+            _handler = null;
         }
 
         @Override

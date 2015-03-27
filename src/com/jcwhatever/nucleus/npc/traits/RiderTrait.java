@@ -55,7 +55,7 @@ public class RiderTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new Rider(npc, this);
+        return new Rider(this);
     }
 
     public static class Rider extends NpcTrait {
@@ -65,11 +65,10 @@ public class RiderTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        Rider(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        Rider(NpcTraitType type) {
+            super(type);
         }
 
         /**
@@ -134,14 +133,19 @@ public class RiderTrait extends NpcTraitType {
         }
 
         @Override
-        public void onSpawn(NpcSpawnReason reason) {
+        protected void onSpawn(NpcSpawnReason reason) {
             if (isEnabled())
                 mountCurrent();
         }
 
         @Override
-        public void onDespawn(NpcDespawnReason reason) {
+        protected void onDespawn(NpcDespawnReason reason) {
             dismountCurrent();
+        }
+
+        @Override
+        protected void onRemove() {
+            _vehicle = null;
         }
 
         @Override

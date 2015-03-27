@@ -44,16 +44,15 @@ import javax.annotation.Nullable;
 public class EntitySheepTrait extends EntityAgeableTrait {
 
     private boolean _isSheared;
-    private DyeColor _color = DyeColor.WHITE;
+    private DyeColor _color;
 
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntitySheepTrait(INpc npc, NpcTraitType type) {
-        super(npc, type, EntityType.SHEEP);
+    EntitySheepTrait(NpcTraitType type) {
+        super(type, EntityType.SHEEP);
     }
 
     /**
@@ -111,7 +110,15 @@ public class EntitySheepTrait extends EntityAgeableTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _isSheared = false;
+        _color = DyeColor.WHITE;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

@@ -46,11 +46,10 @@ public class EntityPigZombieTrait extends EntityZombieTrait {
     /**
      * Constructor.
      *
-     * @param npc  The NPC the trait is for.
      * @param type The parent type that instantiated the trait.
      */
-    EntityPigZombieTrait(INpc npc, NpcTraitType type) {
-        super(npc, type);
+    EntityPigZombieTrait(NpcTraitType type) {
+        super(type);
     }
 
     @Override
@@ -107,7 +106,14 @@ public class EntityPigZombieTrait extends EntityZombieTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _anger = 0;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

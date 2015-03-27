@@ -51,12 +51,11 @@ public class EntityAgeableTrait extends LivingEntityTrait {
     /**
      * Constructor.
      *
-     * @param npc         The NPC the trait is for.
      * @param type        The parent type that instantiated the trait.
      * @param entityType  The entity type.
      */
-    EntityAgeableTrait(INpc npc, NpcTraitType type, EntityType entityType) {
-        super(npc, type, entityType);
+    EntityAgeableTrait(NpcTraitType type, EntityType entityType) {
+        super(type, entityType);
     }
 
     /**
@@ -111,7 +110,15 @@ public class EntityAgeableTrait extends LivingEntityTrait {
     }
 
     @Override
-    public void onSpawn(NpcSpawnReason reason) {
+    protected void onAdd(INpc npc) {
+        super.onAdd(npc);
+
+        _age = 0;
+        _isAgeLock = false;
+    }
+
+    @Override
+    protected void onSpawn(NpcSpawnReason reason) {
 
         super.onSpawn(reason);
 

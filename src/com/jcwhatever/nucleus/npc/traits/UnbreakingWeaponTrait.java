@@ -65,7 +65,7 @@ public class UnbreakingWeaponTrait extends NpcTraitType {
             Bukkit.getPluginManager().registerEvents(_listener, getPlugin());
         }
 
-        return new UnbreakingWeapon(npc, this);
+        return new UnbreakingWeapon(this);
     }
 
     public static class UnbreakingWeapon extends NpcTrait {
@@ -73,11 +73,10 @@ public class UnbreakingWeaponTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc   The NPC the trait is for.
          * @param type  The parent type that instantiated the trait.
          */
-        UnbreakingWeapon(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        UnbreakingWeapon(NpcTraitType type) {
+            super(type);
         }
     }
 

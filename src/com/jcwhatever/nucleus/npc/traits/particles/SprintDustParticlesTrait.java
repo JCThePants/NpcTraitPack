@@ -47,7 +47,7 @@ public class SprintDustParticlesTrait extends NpcTraitType {
 
     @Override
     protected NpcTrait createTrait(INpc npc) {
-        return new SprintDustParticles(npc, this);
+        return new SprintDustParticles(this);
     }
 
     public static class SprintDustParticles extends ParticlesTrait {
@@ -57,11 +57,15 @@ public class SprintDustParticlesTrait extends NpcTraitType {
         /**
          * Constructor.
          *
-         * @param npc  The NPC the trait is for.
          * @param type The parent type that instantiated the trait.
          */
-        protected SprintDustParticles(INpc npc, NpcTraitType type) {
-            super(npc, type);
+        protected SprintDustParticles(NpcTraitType type) {
+            super(type);
+        }
+
+        @Override
+        protected void onAdd(INpc npc) {
+            _material = Material.STONE.getId();
         }
 
         /**
