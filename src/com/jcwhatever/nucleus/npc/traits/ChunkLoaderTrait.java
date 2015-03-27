@@ -93,8 +93,6 @@ public class ChunkLoaderTrait extends NpcTraitType {
          */
         ChunkLoader(INpc npc, NpcTraitType type) {
             super(npc, type);
-
-            setInterval(5);
         }
 
         /**
