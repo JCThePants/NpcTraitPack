@@ -34,8 +34,9 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.NpcUtils;
-import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
+import com.jcwhatever.nucleus.utils.coords.ChunkUtils;
 import com.jcwhatever.nucleus.utils.coords.Coords2Di;
+import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -141,7 +142,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         protected void onRun() {
 
             Location npcLocation = getNpc().getLocation(NPC_LOCATION);
-            MutableCoords2Di chunkCoord = Coords2Di.getChunkCoords(npcLocation, _chunkCoords);
+            MutableCoords2Di chunkCoord = ChunkUtils.getChunkCoords(npcLocation, _chunkCoords);
 
             // check if NPC is still in same chunk
             if (_current != null && _current.getX() == chunkCoord.getX() &&
