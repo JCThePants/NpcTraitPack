@@ -38,6 +38,9 @@ import com.jcwhatever.nucleus.npc.traits.particles.HeartParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.RainbowDustParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.SmokeParticlesTrait;
 import com.jcwhatever.nucleus.npc.traits.particles.SprintDustParticlesTrait;
+import com.jcwhatever.nucleus.npc.traits.waypoints.PlannedWaypointsTrait;
+import com.jcwhatever.nucleus.npc.traits.waypoints.SimpleWaypointsTrait;
+import com.jcwhatever.nucleus.npc.traits.waypoints.plan.WaypointPairFactory;
 import com.jcwhatever.nucleus.providers.npc.INpcProvider;
 import com.jcwhatever.nucleus.providers.npc.events.NpcCreateEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcEntityTypeChangeEvent;
@@ -59,6 +62,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
     private static NpcTraitPack _instance;
 
     private TraitNmsManager _nmsManager;
+    private WaypointPairFactory _waypointFactory;
 
     public static NpcTraitPack getPlugin() {
         return _instance;
@@ -70,6 +74,10 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
 
     public static TraitNmsManager getNmsManager() {
         return _instance._nmsManager;
+    }
+
+    public static WaypointPairFactory getWaypointPairFactory() {
+        return _instance._waypointFactory;
     }
 
     @Override
@@ -92,6 +100,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
         _instance = this;
 
         _nmsManager = new TraitNmsManager();
+        _waypointFactory = new WaypointPairFactory();
 
         INpcProvider provider = Nucleus.getProviderManager().getNpcProvider();
 
@@ -110,12 +119,14 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                     .registerTrait(new PickupVictimDropsTrait())
                     .registerTrait(new ProtectPassengerTrait())
                     .registerTrait(new RiderTrait())
-                    .registerTrait(new SimpleWaypointsTrait())
                     .registerTrait(new UnbreakingArmorTrait())
                     .registerTrait(new UnbreakingWeaponTrait())
                     .registerTrait(new FlockingTrait())
                     .registerTrait(new SpigotActivatedTrait())
                     .registerTrait(new ChunkLoaderTrait())
+
+                    .registerTrait(new SimpleWaypointsTrait())
+                    .registerTrait(new PlannedWaypointsTrait())
 
                     // particle traits
                     .registerTrait(new EnderParticlesTrait())
