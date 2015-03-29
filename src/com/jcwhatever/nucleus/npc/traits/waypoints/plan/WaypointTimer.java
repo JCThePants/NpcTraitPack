@@ -25,14 +25,13 @@
 package com.jcwhatever.nucleus.npc.traits.waypoints.plan;
 
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
+import com.jcwhatever.nucleus.npc.traits.waypoints.provider.SimpleWaypointProvider;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Scheduler;
-import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 
 import org.bukkit.Location;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.WeakHashMap;
 import javax.annotation.Nullable;
@@ -52,12 +51,11 @@ public abstract class WaypointTimer {
 
     private final WaypointPlan _plan = new WaypointPlan();
 
-    private LinkedList<Location> _waypoints;
+    private SimpleWaypointProvider _waypoints;
     private int _pathIndex = -1;
     private int _pairIndex;
     private long _nextStepTime = 0;
     private double _speed;
-    private Location _currentDestination;
     private final Location _currentPosition = new Location(null, 0, 0, 0);
 
     private boolean _isRunning;
@@ -78,15 +76,18 @@ public abstract class WaypointTimer {
      *
      * @param waypoints  The waypoints to use.
      */
-    public void init(LinkedList<Location> waypoints) {
+    public void init(SimpleWaypointProvider waypoints) {
         PreCon.notNull(waypoints);
 
         _waypoints = waypoints;
 
-        if (_waypoints.isEmpty())
+        if (_waypoints.hasNext()) {
+            Location current = _waypoints.next(CURRENT_PATH);
+            assert current != null;
+
+            _plan.set(current.getWorld(), waypoints.getWaypoints(), true);
+        } else {
             _plan.clear();
-        else {
-            _plan.set(_waypoints.get(0).getWorld(), _waypoints, true);
         }
     }
 
@@ -101,26 +102,22 @@ public abstract class WaypointTimer {
      * Get the current destination waypoint.
      */
     @Nullable
-    public Location getCurrentDestination() {
-        return _currentDestination;
+    public Location getCurrentDestination(Location output) {
+        return _waypoints.getCurrent(output);
     }
 
     /**
      * Start the timer.
-     *
-     * @param currentDestination  The current destination waypoint.
      */
-    public void start(Location currentDestination, double speed) {
-        PreCon.notNull(currentDestination);
+    public void start(double speed) {
 
         if (_isRunning)
             return;
 
         _speed = speed;
-        _currentDestination = currentDestination;
 
         // get the path point index of the current destination.
-        _pathIndex = _plan.getPairStartIndex(currentDestination);
+        _pathIndex = _plan.getPairStartIndex(_waypoints.getCurrent(CURRENT_PATH));
         if (_pathIndex != -1) {
             // get the pair index of the current path point index.
             _pairIndex = _plan.getPairIndex(_pathIndex);
@@ -146,9 +143,8 @@ public abstract class WaypointTimer {
      * Dispose the timer. Can be re-initialized.
      */
     public void dispose() {
-        _currentDestination = null;
         _isRunning = false;
-        _waypoints.clear();
+        _waypoints.reset();
     }
 
     /**
@@ -174,11 +170,10 @@ public abstract class WaypointTimer {
         _pathIndex++;
 
         // check if path is finished
-        if (_pathIndex >= _plan.getPathSize() || _waypoints.isEmpty()) {
+        if (_pathIndex >= _plan.getPathSize() || !_waypoints.hasNext()) {
 
-            _waypoints.clear();
-            LocationUtils.copy(_currentDestination, _currentPosition);
-            _currentDestination = null;
+            _waypoints.reset();
+            _waypoints.getCurrent(_currentPosition);
             stop();
             onPathComplete();
 
@@ -186,21 +181,24 @@ public abstract class WaypointTimer {
         }
 
         int pairIndex = _plan.getPairIndex(_pathIndex);
-        if (_pairIndex != -1) {
+        if (_pairIndex == -1) {
+            stop();
+        } else {
 
             // see if the current path index is in a new path pair
             if (pairIndex != _pairIndex) {
-                _currentDestination = _waypoints.remove();
+                _waypoints.next(CURRENT_PATH);
                 _pairIndex = pairIndex;
             }
 
             Location current = _plan.getLocation(_pathIndex, _currentPosition);
 
             onMove(current);
-        }
 
-        // calculate when the next increment should happen
-        _nextStepTime = calculateNextStepTime();
+
+            // calculate when the next increment should happen
+            _nextStepTime = calculateNextStepTime();
+        }
     }
 
     /*

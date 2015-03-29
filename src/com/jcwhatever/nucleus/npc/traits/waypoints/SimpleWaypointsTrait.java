@@ -25,6 +25,7 @@
 package com.jcwhatever.nucleus.npc.traits.waypoints;
 
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
+import com.jcwhatever.nucleus.npc.traits.waypoints.provider.SimpleWaypointProvider;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.ai.INpcState;
 import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
@@ -39,7 +40,6 @@ import com.jcwhatever.nucleus.utils.observer.update.NamedUpdateAgents;
 import org.bukkit.Location;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * Simple waypoints queue. Add waypoints to the trait and the NPC
@@ -65,10 +65,11 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
     public static class SimpleWaypoints extends NpcTrait {
 
-        private LinkedList<Location> _waypoints = new LinkedList<>();
+        private static final Location CURRENT = new Location(null, 0, 0, 0);
+
+        private final SimpleWaypointProvider _provider = new SimpleWaypointProvider();
         private final NamedUpdateAgents _subscriberAgents = new NamedUpdateAgents();
 
-        private Location _current;
         private INpcGoal _waypointGoal;
 
         /**
@@ -90,7 +91,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         public SimpleWaypoints addWaypoint(Location location) {
             PreCon.notNull(location);
 
-            _waypoints.add(location);
+            _provider.getWaypoints().add(location);
 
             return this;
         }
@@ -105,7 +106,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
         public SimpleWaypoints addWaypoints(Collection<Location> locations) {
             PreCon.notNull(locations);
 
-            _waypoints.addAll(locations);
+            _provider.getWaypoints().addAll(locations);
 
             return this;
         }
@@ -158,8 +159,7 @@ public class SimpleWaypointsTrait extends NpcTraitType {
          * Clear all way points.
          */
         public void clear() {
-            _waypoints.clear();
-            _current = null;
+            _provider.reset();
         }
 
         @Override
@@ -181,12 +181,12 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
             @Override
             public void reset(INpcState state) {
-                _waypoints.clear();
+                _provider.reset();
             }
 
             @Override
             public boolean canRun(INpcState state) {
-                return !_waypoints.isEmpty();
+                return _provider.hasNext();
             }
 
             @Override
@@ -208,28 +208,27 @@ public class SimpleWaypointsTrait extends NpcTraitType {
             public void run(INpcGoalAgent goalAgent) {
                 if (!getNpc().getNavigator().isRunning()) {
 
-                    if (_waypoints.isEmpty()) {
+                    if (_provider.hasNext()) {
+                        next();
+                    } else {
                         _subscriberAgents.update("onFinish", getNpc());
 
                         // check waypoints again in case more were added
                         // by onFinish subscriber
-                        if (_waypoints.isEmpty())
-                            goalAgent.finish();
-                        else
+                        if (_provider.hasNext())
                             next();
-                    }
-                    else {
-                        next();
+                        else
+                            goalAgent.finish();
                     }
                 }
             }
 
             private void next() {
 
-                _current = _waypoints.removeFirst();
+                Location current = _provider.next(CURRENT);
 
-                getNpc().getNavigator().setTarget(_current);
-                getNpc().lookLocation(_current);
+                getNpc().getNavigator().setTarget(current);
+                getNpc().lookLocation(current);
             }
         }
     }

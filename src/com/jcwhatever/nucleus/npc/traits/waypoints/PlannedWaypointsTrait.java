@@ -26,6 +26,7 @@ package com.jcwhatever.nucleus.npc.traits.waypoints;
 
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.npc.traits.waypoints.plan.WaypointTimer;
+import com.jcwhatever.nucleus.npc.traits.waypoints.provider.SimpleWaypointProvider;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.ai.INpcState;
 import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
@@ -54,7 +55,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * Pre-planned Waypoints that run even when the NPC is not spawned (due to chunk unload).
@@ -95,13 +95,13 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         private static final String META_AWAITING_RESPAWN = "__NpcTraitPack:PlannedWaypoints:AwaitingRespawn_";
         private static final MutableCoords2Di CHUNK_COORDS = new MutableCoords2Di();
         private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
+        private static final Location CURRENT = new Location(null, 0, 0, 0);
         private static BukkitListener _listener;
 
-        private final LinkedList<Location> _waypoints = new LinkedList<>();
+        private final SimpleWaypointProvider _provider = new SimpleWaypointProvider();
         private final NamedUpdateAgents _subscriberAgents = new NamedUpdateAgents();
         private final Timer _timer = new Timer();
 
-        private Location _current;
         private INpcGoal _waypointGoal;
 
         /**
@@ -128,10 +128,10 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         public PlannedWaypoints setWaypoints(Collection<Location> locations) {
             PreCon.notNull(locations);
 
-            _waypoints.clear();
-            _waypoints.addAll(locations);
+            _provider.reset();
+            _provider.getWaypoints().addAll(locations);
 
-            _timer.init(_waypoints);
+            _timer.init(_provider);
 
             return this;
         }
@@ -187,8 +187,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
          * Clear all way points.
          */
         public void clear() {
-            _waypoints.clear();
-            _current = null;
+            _provider.reset();
             setAwaitingRespawn(AwaitRespawnReason.NONE);
         }
 
@@ -209,7 +208,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         @Override
         protected void onRun() {
 
-            if (_current == null || _timer.isRunning())
+            if (_provider.getCurrent(CURRENT) == null || _timer.isRunning())
                 return;
 
             // Unload current chunk if surrounding chunks are not loaded.
@@ -223,7 +222,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 double speed = getNpc().getNavigator().getCurrentSettings().getSpeed();
 
                 getNpc().despawn();
-                _timer.start(_current, speed);
+                _timer.start(speed);
             }
         }
 
@@ -336,7 +335,6 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                         assert npcEntity != null;
 
                         npcEntity.teleport(currentPosition);
-                        trait._current = trait._timer.getCurrentDestination();
                     }
                 }
 
@@ -354,13 +352,14 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 PlannedWaypoints trait = (PlannedWaypoints)traits.get(traitName);
                 assert trait != null;
 
-                if (event.getReason() == NpcDespawnReason.CHUNK_UNLOAD && trait._current != null) {
+                if (event.getReason() == NpcDespawnReason.CHUNK_UNLOAD &&
+                        trait._provider.getCurrent(CURRENT) != null) {
 
                     trait.setAwaitingRespawn(AwaitRespawnReason.CHUNK_UNLOAD);
 
                     double speed = event.getNpc().getNavigator().getCurrentSettings().getSpeed();
 
-                    trait._timer.start(trait._current, speed);
+                    trait._timer.start(speed);
                 }
             }
         }
@@ -382,7 +381,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
             @Override
             public boolean canRun(INpcState state) {
-                return !_waypoints.isEmpty();
+                return _provider.hasNext();
             }
 
             @Override
@@ -405,28 +404,27 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
                 if (!getNpc().getNavigator().isRunning()) {
 
-                    if (_waypoints.isEmpty()) {
+                    if (_provider.hasNext()) {
+                        next();
+                    } else {
                         _subscriberAgents.update("onFinish", getNpc());
 
                         // check waypoints again in case more were added
                         // by onFinish subscriber
-                        if (_waypoints.isEmpty())
-                            goalAgent.finish();
-                        else
+                        if (_provider.hasNext())
                             next();
-                    }
-                    else {
-                        next();
+                        else
+                            goalAgent.finish();
                     }
                 }
             }
 
             private void next() {
 
-                _current = _waypoints.removeFirst();
+                Location current = _provider.next(CURRENT);
 
-                getNpc().getNavigator().setTarget(_current);
-                getNpc().lookLocation(_current);
+                getNpc().getNavigator().setTarget(current);
+                getNpc().lookLocation(current);
             }
         }
     }
