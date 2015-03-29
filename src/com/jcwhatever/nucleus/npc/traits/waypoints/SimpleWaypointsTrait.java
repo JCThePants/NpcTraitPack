@@ -22,8 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.jcwhatever.nucleus.npc.traits;
+package com.jcwhatever.nucleus.npc.traits.waypoints;
 
+import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.ai.INpcState;
 import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
@@ -163,12 +164,6 @@ public class SimpleWaypointsTrait extends NpcTraitType {
 
         @Override
         protected void onRemove() {
-            stop();
-            clear();
-        }
-
-        @Override
-        protected void onDispose() {
             stop();
             clear();
             _subscriberAgents.disposeAgents();
