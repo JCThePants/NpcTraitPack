@@ -101,9 +101,8 @@ public class WaypointPlan {
 
         for (Location location : waypoints) {
 
-            if (location.getWorld() == null) {
+            if (location.getWorld() == null)
                 throw new IllegalStateException("Waypoint cannot have a null world.");
-            }
 
             if (!world.equals(location.getWorld())) {
                 throw new IllegalStateException("Waypoint is not in the correct world. " +
@@ -113,9 +112,8 @@ public class WaypointPlan {
             if (previous != null) {
 
                 WaypointPair pair = pairFactory.getPair(previous, location, cachePairs);
-                if (!pair.hasPath()) {
+                if (!pair.hasPath())
                     throw new RuntimeException("Failed to find path for waypoint pair.");
-                }
 
                 _waypointPairs.add(pair);
 
@@ -192,6 +190,8 @@ public class WaypointPlan {
      * @return  The path index or -1 if the location is not on the path.
      */
     public int getPathIndex(Location location) {
+        PreCon.notNull(location);
+
         Coords3Di coords = Coords3Di.fromLocation(location);
 
         for (int i=0; i < _path.size(); i++) {
@@ -223,6 +223,8 @@ public class WaypointPlan {
      * @return  The path index of the first location in the pair or -1 if not found.
      */
     public int getPairStartIndex(Location pairEndLocation) {
+        PreCon.notNull(pairEndLocation);
+
         Integer index = _indexMap.get(pairEndLocation);
         if (index == null)
             return -1;
