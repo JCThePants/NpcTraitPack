@@ -343,8 +343,11 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                         Scheduler.runTaskLater(NpcTraitPack.getPlugin(), new Runnable() {
                             @Override
                             public void run() {
-                                trait.setAwaitingRespawn(AwaitRespawnReason.INVOKED);
-                                event.getNpc().spawn(currentPosition);
+
+                                if (!event.getNpc().isSpawned() && !trait.isAwaitingChunkReload()) {
+                                    trait.setAwaitingRespawn(AwaitRespawnReason.INVOKED);
+                                    event.getNpc().spawn(currentPosition);
+                                }
                             }
                         });
 

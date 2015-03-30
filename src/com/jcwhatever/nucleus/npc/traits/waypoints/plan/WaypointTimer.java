@@ -162,8 +162,8 @@ public abstract class WaypointTimer {
      * Dispose the timer. Can be re-initialized.
      */
     public void dispose() {
-        _isRunning = false;
-        _waypoints.reset();
+        stop(null);
+        _plan.clear();
     }
 
     /**
