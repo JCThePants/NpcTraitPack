@@ -33,6 +33,7 @@ import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
 import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoalAgent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
+import com.jcwhatever.nucleus.providers.npc.events.NpcEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.INpcTraits;
@@ -50,8 +51,8 @@ import com.jcwhatever.nucleus.utils.observer.update.NamedUpdateAgents;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.Collection;
@@ -61,7 +62,8 @@ import java.util.Collection;
  *
  * <p>Plans each step of the path of waypoints using AStar. It uses the plan to calculate
  * where the NPC should be over time while it's despawned due to chunk unload. When the chunk is reloaded
- * or the NPC reaches a waypoint where the chunk is loaded, the NPC is moved to the point it should be at.</p>
+ * or the NPC reaches a waypoint where the chunk is loaded, the NPC is spawned and moved to the point
+ * it should be at.</p>
  *
  * <p>Only works with ground based paths.</p>
  *
@@ -73,6 +75,10 @@ import java.util.Collection;
  *
  * <p>It is also recommended to use the {@link com.jcwhatever.nucleus.npc.traits.SpigotActivatedTrait} in
  * conjunction with this trait.</p>
+ *
+ * <p>Use instead of a chunk loader trait to path large distances at all times to improve performance and
+ * memory consumption.</p>
+ *
  */
 public class PlannedWaypointsTrait  extends NpcTraitType {
 
@@ -92,6 +98,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
     public static class PlannedWaypoints extends NpcRunnableTrait {
 
+        private static final int CHUNK_RADIUS = 2;
         private static final String META_AWAITING_RESPAWN = "__NpcTraitPack:PlannedWaypoints:AwaitingRespawn_";
         private static final MutableCoords2Di CHUNK_COORDS = new MutableCoords2Di();
         private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
@@ -202,7 +209,6 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             clear();
             _subscriberAgents.disposeAgents();
             _timer.dispose();
-            setAwaitingRespawn(AwaitRespawnReason.NONE);
         }
 
         @Override
@@ -211,12 +217,12 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             if (_provider.getCurrent(CURRENT) == null || _timer.isRunning())
                 return;
 
-            // Unload current chunk if surrounding chunks are not loaded.
+            // despawn NPC and start timer if surrounding chunks are not loaded.
             // This prevents the NPC from being slowed by spigot activation.
 
             Location npcLocation = getNpc().getLocation(NPC_LOCATION);
 
-            if (!ChunkUtils.isNearbyChunksLoaded(npcLocation, 3)) {
+            if (!ChunkUtils.isNearbyChunksLoaded(npcLocation, CHUNK_RADIUS)) {
                 setAwaitingRespawn(AwaitRespawnReason.INVOKED);
 
                 double speed = getNpc().getNavigator().getCurrentSettings().getSpeed();
@@ -265,14 +271,15 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             protected void onMove(Location current) {
                 Coords2Di chunkCoords = ChunkUtils.getChunkCoords(current, CHUNK_COORDS);
                 Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+                assert npcLocation != null;
 
                 // make sure enough chunks are loaded around the location so that
                 // spigot will allow the entity to be activated.
                 boolean isNearbyChunksLoaded = ChunkUtils.isNearbyChunksLoaded(
-                        npcLocation.getWorld(), chunkCoords.getX(), chunkCoords.getZ(), 3);
+                        npcLocation.getWorld(), chunkCoords.getX(), chunkCoords.getZ(), CHUNK_RADIUS);
 
                 if (isNearbyChunksLoaded) {
-                    stop();
+                    stop(null);
                     setAwaitingRespawn(AwaitRespawnReason.INVOKED);
                     spawnNpc(current);
                 }
@@ -280,7 +287,12 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
             @Override
             protected void onPathComplete() {
+                _provider.reset();
                 _subscriberAgents.update("onFinish", getNpc());
+
+                if (!getNpc().isSpawned() && _provider.hasNext()) {
+                    start(getSpeed());
+                }
             }
 
             private void spawnNpc(Location location) {
@@ -288,6 +300,8 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 if (isAwaitingChunkReload()) {
                     // load chunk NPC is in to cause respawn.
                     Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+                    assert  npcLocation != null;
+
                     Coords2Di chunkCoords = ChunkUtils.getChunkCoords(npcLocation, CHUNK_COORDS);
                     npcLocation.getWorld().loadChunk(chunkCoords.getX(), chunkCoords.getZ());
                 } else {
@@ -302,20 +316,26 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
             String traitName = NpcTraitPack.getLookup(NAME);
 
-            @EventHandler
-            private void onNpcSpawn(final NpcSpawnEvent event) {
-
+            private PlannedWaypoints getTrait(NpcEvent event) {
                 INpcTraits traits = event.getNpc().getTraits();
 
                 if (!traits.isEnabled(traitName))
+                    return null;
+
+                return (PlannedWaypoints)traits.get(traitName);
+            }
+
+            @EventHandler(priority = EventPriority.HIGHEST)
+            private void onNpcSpawn(final NpcSpawnEvent event) {
+
+                final PlannedWaypoints trait = getTrait(event);
+                if (trait == null)
                     return;
 
-                final PlannedWaypoints trait = (PlannedWaypoints)traits.get(traitName);
-                assert trait != null;
+                Timer timer = trait._timer;
+                final Location currentPosition = timer.stop(new Location(null, 0, 0, 0));
 
-                final Location currentPosition = trait._timer.stop();
-
-                if (currentPosition != null && trait.isAwaitingRespawn()) {
+                if (trait.isAwaitingRespawn()) {
 
                     if (event.getReason() == NpcSpawnReason.CHUNK_LOAD) {
                         event.setCancelled(true);
@@ -330,12 +350,6 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
                         return;
                     }
-                    else {
-                        Entity npcEntity = event.getNpc().getEntity();
-                        assert npcEntity != null;
-
-                        npcEntity.teleport(currentPosition);
-                    }
                 }
 
                 trait.setAwaitingRespawn(AwaitRespawnReason.NONE);
@@ -344,13 +358,9 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             @EventHandler
             private void onNpcDespawn(NpcDespawnEvent event) {
 
-                INpcTraits traits = event.getNpc().getTraits();
-
-                if (!traits.isEnabled(traitName))
+                PlannedWaypoints trait = getTrait(event);
+                if (trait == null)
                     return;
-
-                PlannedWaypoints trait = (PlannedWaypoints)traits.get(traitName);
-                assert trait != null;
 
                 if (event.getReason() == NpcDespawnReason.CHUNK_UNLOAD &&
                         trait._provider.getCurrent(CURRENT) != null) {

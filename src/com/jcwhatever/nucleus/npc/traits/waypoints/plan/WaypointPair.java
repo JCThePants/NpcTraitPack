@@ -60,7 +60,9 @@ public class WaypointPair {
     public WaypointPair(Location start, Location end) {
         PreCon.notNull(start);
         PreCon.notNull(end);
-        PreCon.notNull(start.getWorld());
+        PreCon.notNull(start.getWorld(), "start world");
+        PreCon.notNull(end.getWorld(), "end world");
+        PreCon.isValid(start.getWorld().equals(end.getWorld()), "locations must be in the same world");
 
         _start.copyFrom(start);
         _end.copyFrom(end);
@@ -123,10 +125,19 @@ public class WaypointPair {
      *
      * @param list  The list to place the results into.
      */
-    public void getPath(List<Coords3Di> list) {
+    public void getPath(List<Coords3Di> list, boolean includeStart, boolean includeEnd) {
         PreCon.notNull(list);
 
-        list.addAll(_path.values());
+        if (includeStart && includeEnd) {
+            list.addAll(_path.values());
+        }
+        else {
+
+            int start = includeStart ? 0 : 1;
+            int end = includeEnd ? 0 : 1;
+
+            list.addAll(_path.values().subList(start, _path.values().size() - end));
+        }
     }
 
     /**

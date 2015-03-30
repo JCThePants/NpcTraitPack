@@ -28,6 +28,7 @@ import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.npc.traits.waypoints.provider.SimpleWaypointProvider;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.Scheduler;
+import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 
 import org.bukkit.Location;
 
@@ -99,44 +100,62 @@ public abstract class WaypointTimer {
     }
 
     /**
-     * Get the current destination waypoint.
+     * Get the speed the timer is running at.
      */
-    @Nullable
-    public Location getCurrentDestination(Location output) {
-        return _waypoints.getCurrent(output);
+    public double getSpeed() {
+        return _speed;
     }
 
     /**
      * Start the timer.
+     *
+     * @return  True if the timer was started, otherwise false.
      */
-    public void start(double speed) {
+    public boolean start(double speed) {
 
         if (_isRunning)
-            return;
+            return false;
 
         _speed = speed;
 
         // get the path point index of the current destination.
-        _pathIndex = _plan.getPairStartIndex(_waypoints.getCurrent(CURRENT_PATH));
+
+        _pathIndex = -1;
+
+        while (_pathIndex == -1 && _waypoints.hasNext()) {
+            _pathIndex = _plan.getPairStartIndex(_waypoints.getCurrent(CURRENT_PATH));
+            if (_pathIndex == -1 && _waypoints.hasNext())
+                _waypoints.next(CURRENT_PATH);
+        }
+
         if (_pathIndex != -1) {
             // get the pair index of the current path point index.
             _pairIndex = _plan.getPairIndex(_pathIndex);
             _isRunning = true;
+            _instances.put(this, null);
+            return true;
         }
 
-        _instances.put(this, null);
+        return false;
     }
 
     /**
-     * Stop the timer.
+     * Stop the timer and return the position the NPC should be at.
      *
-     * @return  The current position the NPC should be at.
+     * @param output  The output location to put the current position values into.
+     *
+     * @return  The output location with the current position the NPC should be at or null if none.
      */
-    public Location stop() {
+    @Nullable
+    public Location stop(@Nullable Location output) {
 
         _isRunning = false;
         _instances.remove(this);
-        return _currentPosition;
+
+        if (output == null)
+            return null;
+
+        return LocationUtils.copy(_currentPosition, output);
     }
 
     /**
@@ -172,17 +191,13 @@ public abstract class WaypointTimer {
         // check if path is finished
         if (_pathIndex >= _plan.getPathSize() || !_waypoints.hasNext()) {
 
-            _waypoints.reset();
-            _waypoints.getCurrent(_currentPosition);
-            stop();
-            onPathComplete();
-
+            finish();
             return;
         }
 
         int pairIndex = _plan.getPairIndex(_pathIndex);
-        if (_pairIndex == -1) {
-            stop();
+        if (pairIndex == -1) {
+            finish();
         } else {
 
             // see if the current path index is in a new path pair
@@ -193,8 +208,7 @@ public abstract class WaypointTimer {
 
             Location current = _plan.getLocation(_pathIndex, _currentPosition);
 
-            onMove(current);
-
+            onMove(LocationUtils.copy(current));
 
             // calculate when the next increment should happen
             _nextStepTime = calculateNextStepTime();
@@ -221,6 +235,17 @@ public abstract class WaypointTimer {
         return System.currentTimeMillis() + (int)(time * 50 * 3);
     }
 
+    /*
+     * Stop the timer and invoke onPathComplete.
+     */
+    private void finish() {
+        stop(null);
+        onPathComplete();
+    }
+
+    /*
+     * Global position timer.
+     */
     private static class PositionTimer implements Runnable {
 
         final ArrayList<WaypointTimer> timers = new ArrayList<>(25);

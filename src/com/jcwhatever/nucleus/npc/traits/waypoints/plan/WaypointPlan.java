@@ -70,6 +70,7 @@ public class WaypointPlan {
             _path.clear();
 
         _indexMap.clear();
+        _pathPairIndexMap.clear();
     }
 
     /**
@@ -99,11 +100,22 @@ public class WaypointPlan {
         WaypointPairFactory pairFactory = NpcTraitPack.getWaypointPairFactory();
 
         for (Location location : waypoints) {
+
+            if (location.getWorld() == null) {
+                throw new IllegalStateException("Waypoint cannot have a null world.");
+            }
+
+            if (!world.equals(location.getWorld())) {
+                throw new IllegalStateException("Waypoint is not in the correct world. " +
+                        "Should be in: " + world.getName() + ", is in: " + location.getWorld().getName());
+            }
+
             if (previous != null) {
 
                 WaypointPair pair = pairFactory.getPair(previous, location, cachePairs);
-                if (!pair.hasPath())
-                    continue;
+                if (!pair.hasPath()) {
+                    throw new RuntimeException("Failed to find path for waypoint pair.");
+                }
 
                 _waypointPairs.add(pair);
 
@@ -125,8 +137,9 @@ public class WaypointPlan {
             _path.clear();
         }
 
-        for (WaypointPair pair : _waypointPairs) {
-            pair.getPath(_path);
+        for (int i=0; i < _waypointPairs.size(); i++) {
+            WaypointPair pair = _waypointPairs.get(i);
+            pair.getPath(_path, i == 0, true);
         }
     }
 
@@ -172,6 +185,25 @@ public class WaypointPlan {
     }
 
     /**
+     * Get the path index of a location.
+     *
+     * @param location  The location to check.
+     *
+     * @return  The path index or -1 if the location is not on the path.
+     */
+    public int getPathIndex(Location location) {
+        Coords3Di coords = Coords3Di.fromLocation(location);
+
+        for (int i=0; i < _path.size(); i++) {
+            Coords3Di pathCoord = _path.get(0);
+
+            if (pathCoord.equals(coords))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
      * Get all coordinate points in the planned path.
      *
      * @param output  The collection to put the results into.
@@ -186,12 +218,12 @@ public class WaypointPlan {
      * Get the path index of the location that is the beginning
      * of the waypoint pair that ends with the specified location.
      *
-     * @param endLocation  The destination location of the waypoint pair.
+     * @param pairEndLocation  The destination location of the waypoint pair.
      *
      * @return  The path index of the first location in the pair or -1 if not found.
      */
-    public int getPairStartIndex(Location endLocation) {
-        Integer index = _indexMap.get(endLocation);
+    public int getPairStartIndex(Location pairEndLocation) {
+        Integer index = _indexMap.get(pairEndLocation);
         if (index == null)
             return -1;
 
