@@ -122,10 +122,12 @@ public abstract class WaypointTimer {
 
         _pathIndex = -1;
 
-        while (_pathIndex == -1 && _waypoints.hasNext()) {
+        while (true) {
             _pathIndex = _plan.getPairStartIndex(_waypoints.getCurrent(CURRENT_PATH));
             if (_pathIndex == -1 && _waypoints.hasNext())
                 _waypoints.next(CURRENT_PATH);
+            else
+                break;
         }
 
         if (_pathIndex != -1) {

@@ -35,13 +35,11 @@ import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
 import com.jcwhatever.nucleus.providers.npc.events.NpcEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent;
-import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.INpcTraits;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.Scheduler;
 import com.jcwhatever.nucleus.utils.coords.ChunkUtils;
 import com.jcwhatever.nucleus.utils.coords.Coords2Di;
 import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
@@ -56,6 +54,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.Collection;
+import javax.annotation.Nullable;
 
 /**
  * Pre-planned Waypoints that run even when the NPC is not spawned (due to chunk unload).
@@ -195,7 +194,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
          */
         public void clear() {
             _provider.reset();
-            setAwaitingRespawn(AwaitRespawnReason.NONE);
+            setAwaitingRespawn(null);
         }
 
         @Override
@@ -223,12 +222,30 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             Location npcLocation = getNpc().getLocation(NPC_LOCATION);
 
             if (!ChunkUtils.isNearbyChunksLoaded(npcLocation, CHUNK_RADIUS)) {
-                setAwaitingRespawn(AwaitRespawnReason.INVOKED);
+                despawn();
+            }
+        }
 
-                double speed = getNpc().getNavigator().getCurrentSettings().getSpeed();
-
+        private void despawn() {
+            double speed = getNpc().getNavigator().getCurrentSettings().getSpeed();
+            if (_timer.start(speed)) {
                 getNpc().despawn();
-                _timer.start(speed);
+                setAwaitingRespawn(AwaitRespawnReason.INVOKED);
+            }
+        }
+
+        private void spawn(Location location) {
+
+            if (isAwaitingChunkReload()) {
+                // load chunk NPC is in to cause respawn.
+                Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+                assert  npcLocation != null;
+
+                Coords2Di chunkCoords = ChunkUtils.getChunkCoords(npcLocation, CHUNK_COORDS);
+                npcLocation.getWorld().loadChunk(chunkCoords.getX(), chunkCoords.getZ());
+            } else {
+                // directly spawn NPC.
+                getNpc().spawn(location);
             }
         }
 
@@ -249,15 +266,14 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         /*
          * Set the respawn flag.
          */
-        private void setAwaitingRespawn(AwaitRespawnReason reason) {
-            getNpc().setMeta(META_AWAITING_RESPAWN, reason == AwaitRespawnReason.NONE ? null : reason);
+        private void setAwaitingRespawn(@Nullable AwaitRespawnReason reason) {
+            getNpc().setMeta(META_AWAITING_RESPAWN, reason);
         }
 
         /*
          * Respawn flags.
          */
         private enum AwaitRespawnReason {
-            NONE,
             CHUNK_UNLOAD,
             INVOKED
         }
@@ -281,7 +297,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 if (isNearbyChunksLoaded) {
                     stop(null);
                     setAwaitingRespawn(AwaitRespawnReason.INVOKED);
-                    spawnNpc(current);
+                    spawn(current);
                 }
             }
 
@@ -292,22 +308,6 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
                 if (!getNpc().isSpawned() && _provider.hasNext()) {
                     start(getSpeed());
-                }
-            }
-
-            private void spawnNpc(Location location) {
-
-                if (isAwaitingChunkReload()) {
-                    // load chunk NPC is in to cause respawn.
-                    Location npcLocation = getNpc().getLocation(NPC_LOCATION);
-                    assert  npcLocation != null;
-
-                    Coords2Di chunkCoords = ChunkUtils.getChunkCoords(npcLocation, CHUNK_COORDS);
-                    npcLocation.getWorld().loadChunk(chunkCoords.getX(), chunkCoords.getZ());
-                } else {
-                    setAwaitingRespawn(AwaitRespawnReason.INVOKED);
-                    // directly spawn NPC.
-                    getNpc().spawn(location);
                 }
             }
         }
@@ -325,53 +325,28 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 return (PlannedWaypoints)traits.get(traitName);
             }
 
-            @EventHandler(priority = EventPriority.HIGHEST)
+            @EventHandler(priority = EventPriority.HIGH)
             private void onNpcSpawn(final NpcSpawnEvent event) {
 
                 final PlannedWaypoints trait = getTrait(event);
                 if (trait == null)
                     return;
 
-                Timer timer = trait._timer;
-                final Location currentPosition = timer.stop(new Location(null, 0, 0, 0));
-
-                if (trait.isAwaitingRespawn()) {
-
-                    if (event.getReason() == NpcSpawnReason.CHUNK_LOAD) {
-                        event.setCancelled(true);
-
-                        Scheduler.runTaskLater(NpcTraitPack.getPlugin(), new Runnable() {
-                            @Override
-                            public void run() {
-
-                                if (!event.getNpc().isSpawned() && !trait.isAwaitingChunkReload()) {
-                                    trait.setAwaitingRespawn(AwaitRespawnReason.INVOKED);
-                                    event.getNpc().spawn(currentPosition);
-                                }
-                            }
-                        });
-
-                        return;
-                    }
-                }
-
-                trait.setAwaitingRespawn(AwaitRespawnReason.NONE);
+                trait._timer.stop(null);
+                trait.setAwaitingRespawn(null);
             }
 
             @EventHandler
             private void onNpcDespawn(NpcDespawnEvent event) {
 
                 PlannedWaypoints trait = getTrait(event);
-                if (trait == null)
+                if (trait == null || !trait.isEnabled())
                     return;
 
-                if (event.getReason() == NpcDespawnReason.CHUNK_UNLOAD &&
-                        trait._provider.getCurrent(CURRENT) != null) {
+                if (event.getReason() == NpcDespawnReason.CHUNK_UNLOAD) {
 
                     trait.setAwaitingRespawn(AwaitRespawnReason.CHUNK_UNLOAD);
-
                     double speed = event.getNpc().getNavigator().getCurrentSettings().getSpeed();
-
                     trait._timer.start(speed);
                 }
             }
