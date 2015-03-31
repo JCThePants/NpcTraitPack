@@ -76,7 +76,7 @@ public class SpigotActivatedTrait extends NpcTraitType {
             if (_task == null) {
 
                 final INmsSpigotActivationHandler handler = NpcTraitPack.getNmsManager()
-                        .getNmsHandler("SPIGOT_ACTIVATION");
+                        .getHandler("SPIGOT_ACTIVATION");
                 if (handler == null || !handler.isAvailable())
                     return;
 
