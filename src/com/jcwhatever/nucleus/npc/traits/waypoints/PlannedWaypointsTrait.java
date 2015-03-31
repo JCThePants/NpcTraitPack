@@ -26,26 +26,20 @@ package com.jcwhatever.nucleus.npc.traits.waypoints;
 
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.npc.traits.waypoints.plan.WaypointTimer;
+import com.jcwhatever.nucleus.npc.traits.waypoints.provider.IWaypointProvider;
 import com.jcwhatever.nucleus.npc.traits.waypoints.provider.SimpleWaypointProvider;
 import com.jcwhatever.nucleus.providers.npc.INpc;
-import com.jcwhatever.nucleus.providers.npc.ai.INpcState;
-import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoal;
-import com.jcwhatever.nucleus.providers.npc.ai.goals.INpcGoalAgent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
 import com.jcwhatever.nucleus.providers.npc.events.NpcEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent;
 import com.jcwhatever.nucleus.providers.npc.traits.INpcTraits;
-import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.coords.ChunkUtils;
 import com.jcwhatever.nucleus.utils.coords.Coords2Di;
 import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
-import com.jcwhatever.nucleus.utils.observer.script.IScriptUpdateSubscriber;
-import com.jcwhatever.nucleus.utils.observer.script.ScriptUpdateSubscriber;
-import com.jcwhatever.nucleus.utils.observer.update.NamedUpdateAgents;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -95,7 +89,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         return new PlannedWaypoints(this);
     }
 
-    public static class PlannedWaypoints extends NpcRunnableTrait {
+    public static class PlannedWaypoints extends WaypointsTrait {
 
         private static final int CHUNK_RADIUS = 2;
         private static final String META_AWAITING_RESPAWN = "__NpcTraitPack:PlannedWaypoints:AwaitingRespawn_";
@@ -105,10 +99,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         private static BukkitListener _listener;
 
         private final SimpleWaypointProvider _provider = new SimpleWaypointProvider();
-        private final NamedUpdateAgents _subscriberAgents = new NamedUpdateAgents();
         private final Timer _timer = new Timer();
-
-        private INpcGoal _waypointGoal;
 
         /**
          * Constructor.
@@ -127,9 +118,8 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         /**
          * Set the waypoints.
          *
-         * @param locations  The locations to use as waypoints.
-         *
-         * @return  Self for chaining.
+         * @param locations The locations to use as waypoints.
+         * @return Self for chaining.
          */
         public PlannedWaypoints setWaypoints(Collection<Location> locations) {
             PreCon.notNull(locations);
@@ -142,72 +132,9 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             return this;
         }
 
-        /**
-         * Add a one time callback that is run when the NPC has finished
-         * pathing to all of the way points.
-         *
-         * @param subscriber  The subscriber.
-         *
-         * @return  Self for chaining.
-         */
-        public PlannedWaypoints onFinish(IScriptUpdateSubscriber<INpc> subscriber) {
-            PreCon.notNull(subscriber);
-
-            _subscriberAgents.getAgent("onFinish")
-                    .register(new ScriptUpdateSubscriber<>(subscriber));
-
-            return this;
-        }
-
-        /**
-         * Start pathing to the added waypoints.
-         *
-         * @return  Self for chaining.
-         */
-        public PlannedWaypoints start() {
-
-            if (_waypointGoal == null)
-                _waypointGoal = new WaypointGoal();
-
-            getNpc().getGoals().add(1, _waypointGoal);
-
-            return this;
-        }
-
-        /**
-         * Stop pathing.
-         *
-         * @return  Self for chaining.
-         */
-        public PlannedWaypoints stop() {
-
-            if (_waypointGoal == null)
-                return this;
-
-            getNpc().getGoals().remove(_waypointGoal);
-
-            return this;
-        }
-
-        /**
-         * Clear all way points.
-         */
-        public void clear() {
-            _provider.reset();
-            setAwaitingRespawn(null);
-        }
-
         @Override
         protected void onAdd(INpc npc) {
             setInterval(10);
-        }
-
-        @Override
-        protected void onRemove() {
-            stop();
-            clear();
-            _subscriberAgents.disposeAgents();
-            _timer.dispose();
         }
 
         @Override
@@ -226,6 +153,11 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             }
         }
 
+        @Override
+        protected IWaypointProvider getWaypointProvider() {
+            return _provider;
+        }
+
         private void despawn() {
             double speed = getNpc().getNavigator().getCurrentSettings().getSpeed();
             if (_timer.start(speed)) {
@@ -239,7 +171,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             if (isAwaitingChunkReload()) {
                 // load chunk NPC is in to cause respawn.
                 Location npcLocation = getNpc().getLocation(NPC_LOCATION);
-                assert  npcLocation != null;
+                assert npcLocation != null;
 
                 Coords2Di chunkCoords = ChunkUtils.getChunkCoords(npcLocation, CHUNK_COORDS);
                 npcLocation.getWorld().loadChunk(chunkCoords.getX(), chunkCoords.getZ());
@@ -306,7 +238,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             @Override
             protected void onPathComplete() {
                 _provider.reset();
-                _subscriberAgents.update("onFinish", getNpc());
+                getUpdateAgents().update("onFinish", getNpc());
 
                 if (!getNpc().isSpawned() && _provider.hasNext()) {
                     start(getSpeed());
@@ -324,7 +256,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 if (!traits.isEnabled(traitName))
                     return null;
 
-                return (PlannedWaypoints)traits.get(traitName);
+                return (PlannedWaypoints) traits.get(traitName);
             }
 
             @EventHandler(priority = EventPriority.HIGH)
@@ -351,70 +283,6 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                     double speed = event.getNpc().getNavigator().getCurrentSettings().getSpeed();
                     trait._timer.start(speed);
                 }
-            }
-        }
-
-        /*
-         * NPC Way point goal
-         */
-        private class WaypointGoal implements INpcGoal {
-
-            @Override
-            public String getName() {
-                return "PlannedWaypoint";
-            }
-
-            @Override
-            public void reset(INpcState state) {
-                // do nothing
-            }
-
-            @Override
-            public boolean canRun(INpcState state) {
-                return _provider.hasNext();
-            }
-
-            @Override
-            public float getCost(INpcState state) {
-                return 1.0f;
-            }
-
-            @Override
-            public void pause(INpcState state) {
-                // do nothing
-            }
-
-            @Override
-            public void firstRun(INpcGoalAgent agent) {
-                getNpc().getNavigator().cancel();
-            }
-
-            @Override
-            public void run(INpcGoalAgent goalAgent) {
-
-                if (!getNpc().getNavigator().isRunning()) {
-
-                    if (_provider.hasNext()) {
-                        next();
-                    } else {
-                        _subscriberAgents.update("onFinish", getNpc());
-
-                        // check waypoints again in case more were added
-                        // by onFinish subscriber
-                        if (_provider.hasNext())
-                            next();
-                        else
-                            goalAgent.finish();
-                    }
-                }
-            }
-
-            private void next() {
-
-                Location current = _provider.next(CURRENT);
-
-                getNpc().getNavigator().setTarget(current);
-                getNpc().lookLocation(current);
             }
         }
     }
