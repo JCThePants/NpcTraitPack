@@ -130,7 +130,9 @@ public abstract class WaypointTimer {
                 break;
         }
 
-        if (_pathIndex != -1) {
+        if (_pathIndex == -1) {
+            finish();
+        } else {
             // get the pair index of the current path point index.
             _pairIndex = _plan.getPairIndex(_pathIndex);
             _isRunning = true;

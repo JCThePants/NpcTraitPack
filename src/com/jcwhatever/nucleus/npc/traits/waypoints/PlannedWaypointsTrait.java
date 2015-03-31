@@ -285,9 +285,11 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
             @Override
             protected void onMove(Location current) {
+
                 Coords2Di chunkCoords = ChunkUtils.getChunkCoords(current, CHUNK_COORDS);
                 Location npcLocation = getNpc().getLocation(NPC_LOCATION);
-                assert npcLocation != null;
+                if (npcLocation == null)
+                    return;
 
                 // make sure enough chunks are loaded around the location so that
                 // spigot will allow the entity to be activated.
