@@ -68,6 +68,8 @@ public class LivingEntityTraitType extends NpcTraitType {
                 return new EntityWolfTrait(this);
             case ZOMBIE:
                 return new EntityZombieTrait(this);
+            case RABBIT:
+                return new EntityRabbitTrait(this);
         }
 
         if (Ageable.class.isAssignableFrom(type.getEntityClass()))
