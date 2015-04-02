@@ -36,7 +36,7 @@ public class TraitNmsManager extends NmsManager {
     public TraitNmsManager() {
         super(NpcTraitPack.getPlugin());
 
-        registerNmsHandler("v1_8_R2", "SPIGOT_ACTIVATION",
+        registerHandler("v1_8_R2", "SPIGOT_ACTIVATION",
                 SpigotActivationHandler_v1_8_R2.class);
     }
 }
