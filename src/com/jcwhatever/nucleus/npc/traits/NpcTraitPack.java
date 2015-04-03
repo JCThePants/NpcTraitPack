@@ -102,7 +102,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
         _nmsManager = new TraitNmsManager();
         _waypointFactory = new WaypointPairFactory();
 
-        INpcProvider provider = Nucleus.getProviderManager().getNpcProvider();
+        INpcProvider provider = Nucleus.getProviders().getNpcs();
 
         if (provider == null) {
             getMessenger().warning("Nucleus NPC provider not detected. Disabling.");

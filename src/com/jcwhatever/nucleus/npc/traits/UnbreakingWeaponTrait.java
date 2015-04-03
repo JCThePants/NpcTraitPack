@@ -89,7 +89,7 @@ public class UnbreakingWeaponTrait extends NpcTraitType {
             if (!(damager instanceof LivingEntity))
                 return;
 
-            INpcProvider provider = Nucleus.getProviderManager().getNpcProvider();
+            INpcProvider provider = Nucleus.getProviders().getNpcs();
             assert provider != null;
 
             INpc npc = provider.getNpc(damager);

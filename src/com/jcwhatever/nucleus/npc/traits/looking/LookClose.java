@@ -108,7 +108,7 @@ public class LookClose extends LookHandler {
         Entity npcEntity = getNpc().getEntity();
         assert npcEntity != null;
 
-        final INpcProvider provider = Nucleus.getProviderManager().getNpcProvider();
+        final INpcProvider provider = Nucleus.getProviders().getNpcs();
         assert provider != null;
 
         LivingEntity close = EntityUtils.getClosestLivingEntity(

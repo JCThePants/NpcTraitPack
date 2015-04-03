@@ -234,7 +234,7 @@ public class AggressiveTrait extends NpcTraitType {
 
             if (_target == null || _target.isDead() || !_target.isValid()) {
 
-                final INpcProvider provider = Nucleus.getProviderManager().getNpcProvider();
+                final INpcProvider provider = Nucleus.getProviders().getNpcs();
                 assert provider != null;
 
                 _target = EntityUtils.getClosestLivingEntity(getNpc().getEntity(), 16,
