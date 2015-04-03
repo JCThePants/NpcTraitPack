@@ -32,7 +32,7 @@ import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
-import com.jcwhatever.nucleus.utils.NpcUtils;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
@@ -260,7 +260,7 @@ public class FlockingTrait extends NpcTraitType {
                 if (!(entity instanceof LivingEntity))
                     continue;
 
-                INpc npc = NpcUtils.getNpc(entity);
+                INpc npc = Npcs.getNpc(entity);
                 if (npc == null)
                     continue;
 

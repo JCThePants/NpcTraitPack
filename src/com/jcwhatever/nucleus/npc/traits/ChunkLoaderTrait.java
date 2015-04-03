@@ -33,7 +33,7 @@ import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
-import com.jcwhatever.nucleus.utils.NpcUtils;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.nucleus.utils.coords.ChunkUtils;
 import com.jcwhatever.nucleus.utils.coords.Coords2Di;
 import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
@@ -217,7 +217,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         @EventHandler(priority = EventPriority.MONITOR)
         private void onTeleport(EntityTeleportEvent event) {
 
-            INpc npc = NpcUtils.getNpc(event.getEntity());
+            INpc npc = Npcs.getNpc(event.getEntity());
             if (npc == null)
                 return;
 

@@ -27,7 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.looking;
 import com.jcwhatever.nucleus.Nucleus;
 import com.jcwhatever.nucleus.npc.traits.looking.LookingTrait.Looking;
 import com.jcwhatever.nucleus.providers.npc.INpcProvider;
-import com.jcwhatever.nucleus.utils.NpcUtils;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.nucleus.utils.entity.EntityUtils;
 import com.jcwhatever.nucleus.utils.validate.IValidator;
 
@@ -50,7 +50,7 @@ public class LookClose extends LookHandler {
         @Override
         public boolean isValid(LivingEntity element) {
             return element instanceof Player &&
-                    !NpcUtils.isNpc(element);
+                    !Npcs.isNpc(element);
         }
     };
 

@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDeathEvent;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
-import com.jcwhatever.nucleus.utils.NpcUtils;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -171,7 +171,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
             if (damager == null)
                 return;
 
-            INpc npc = NpcUtils.getNpc(damager);
+            INpc npc = Npcs.getNpc(damager);
             if (npc == null) {
                 _attackerMap.remove(entity);
                 return;
