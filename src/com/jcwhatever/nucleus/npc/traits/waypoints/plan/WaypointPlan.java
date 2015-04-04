@@ -27,6 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.waypoints.plan;
 import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.coords.Coords3Di;
+import com.jcwhatever.nucleus.utils.coords.ICoords3Di;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -48,7 +49,7 @@ public class WaypointPlan {
 
     private World _world;
     private List<WaypointPair> _waypointPairs;
-    private List<Coords3Di> _path;
+    private List<ICoords3Di> _path;
 
     // map waypoint pair end location to the number of path coords that come before
     // the first location in the waypoint pair.
@@ -179,7 +180,7 @@ public class WaypointPlan {
         PreCon.positiveNumber(pathIndex);
         PreCon.notNull(output);
 
-        return _path.get(pathIndex).copyTo(getWorld(), output);
+        return Coords3Di.copyTo(_path.get(pathIndex), getWorld(), output);
     }
 
     /**
@@ -195,7 +196,7 @@ public class WaypointPlan {
         Coords3Di coords = Coords3Di.fromLocation(location);
 
         for (int i=0; i < _path.size(); i++) {
-            Coords3Di pathCoord = _path.get(0);
+            ICoords3Di pathCoord = _path.get(0);
 
             if (pathCoord.equals(coords))
                 return i;
@@ -208,7 +209,7 @@ public class WaypointPlan {
      *
      * @param output  The collection to put the results into.
      */
-    public void getPath(Collection<Coords3Di> output) {
+    public void getPath(Collection<ICoords3Di> output) {
         PreCon.notNull(output);
 
         output.addAll(_path);

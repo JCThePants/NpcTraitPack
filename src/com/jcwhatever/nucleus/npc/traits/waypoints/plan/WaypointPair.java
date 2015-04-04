@@ -29,7 +29,7 @@ import com.jcwhatever.nucleus.utils.astar.AStar;
 import com.jcwhatever.nucleus.utils.astar.AStarResult;
 import com.jcwhatever.nucleus.utils.astar.AStarResult.AStarResultStatus;
 import com.jcwhatever.nucleus.utils.astar.AStarUtils;
-import com.jcwhatever.nucleus.utils.coords.Coords3Di;
+import com.jcwhatever.nucleus.utils.coords.ICoords3Di;
 import com.jcwhatever.nucleus.utils.coords.MutableCoords3Di;
 
 import org.bukkit.Location;
@@ -125,7 +125,7 @@ public class WaypointPair {
      *
      * @param list  The list to place the results into.
      */
-    public void getPath(List<Coords3Di> list, boolean includeStart, boolean includeEnd) {
+    public void getPath(List<ICoords3Di> list, boolean includeStart, boolean includeEnd) {
         PreCon.notNull(list);
 
         if (includeStart && includeEnd) {
