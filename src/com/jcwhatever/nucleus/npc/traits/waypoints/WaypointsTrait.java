@@ -80,7 +80,7 @@ public abstract class WaypointsTrait extends NpcRunnableTrait {
     public WaypointsTrait onFinish(IScriptUpdateSubscriber<INpc> subscriber) {
         PreCon.notNull(subscriber);
 
-        _subscriberAgents.getAgent("onFinish").register(new ScriptUpdateSubscriber<>(subscriber));
+        _subscriberAgents.getAgent("onFinish").addSubscriber(new ScriptUpdateSubscriber<>(subscriber));
 
         return this;
     }
