@@ -251,8 +251,8 @@ public class LivingEntityTrait extends NpcTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _potions.clear();
         _canPickupItems = false;

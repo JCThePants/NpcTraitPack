@@ -69,7 +69,7 @@ public class FreezeHeightTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
             setY();
         }
 

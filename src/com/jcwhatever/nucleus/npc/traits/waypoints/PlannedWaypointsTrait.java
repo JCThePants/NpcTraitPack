@@ -133,7 +133,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
             setInterval(10);
         }
 

@@ -90,7 +90,7 @@ public class FlockingTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
 
             setInterval(7);
 

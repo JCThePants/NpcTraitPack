@@ -218,12 +218,12 @@ public class AggressiveTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
             setInterval(3);
         }
 
         @Override
-        protected void onRemove() {
+        protected void onDetach() {
             // prep for reuse
             _filter = null;
             _target = null;

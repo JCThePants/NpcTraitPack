@@ -190,7 +190,7 @@ public class LookingTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
             _handler = null;
         }
 

@@ -244,8 +244,8 @@ public class EntityHorseTrait extends LivingEntityTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _color = Horse.Color.WHITE;
         _style = Style.NONE;

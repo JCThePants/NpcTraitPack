@@ -78,8 +78,8 @@ public class EntitySlimeTrait extends LivingEntityTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _size = 0;
     }

@@ -106,8 +106,8 @@ public class EntityPigZombieTrait extends EntityZombieTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _anger = 0;
     }

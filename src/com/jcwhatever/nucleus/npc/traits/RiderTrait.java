@@ -144,7 +144,7 @@ public class RiderTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onRemove() {
+        protected void onDetach() {
             _vehicle = null;
         }
 

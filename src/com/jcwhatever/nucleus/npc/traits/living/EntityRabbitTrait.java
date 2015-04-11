@@ -83,8 +83,8 @@ public class EntityRabbitTrait extends EntityAgeableTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _type = Type.SALT_AND_PEPPER;
     }

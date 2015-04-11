@@ -110,8 +110,8 @@ public class EntitySheepTrait extends EntityAgeableTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _isSheared = false;
         _color = DyeColor.WHITE;

@@ -132,7 +132,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onRemove() {
+        protected void onDetach() {
             // prep for reuse
             _chunks.clear();
             _current = null;

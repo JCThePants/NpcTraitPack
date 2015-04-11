@@ -74,7 +74,7 @@ public class ArcherTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
             runTask();
         }
 
@@ -89,7 +89,7 @@ public class ArcherTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onRemove() {
+        protected void onDetach() {
             stopTask();
         }
 

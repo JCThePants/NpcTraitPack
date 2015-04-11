@@ -64,7 +64,7 @@ public class SprintDustParticlesTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onAdd(INpc npc) {
+        protected void onAttach(INpc npc) {
             _material = Material.STONE.getId();
         }
 

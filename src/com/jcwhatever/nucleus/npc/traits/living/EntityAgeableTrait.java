@@ -110,8 +110,8 @@ public class EntityAgeableTrait extends LivingEntityTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _age = 0;
         _isAgeLock = false;

@@ -106,8 +106,8 @@ public class EntityZombieTrait extends LivingEntityTrait {
     }
 
     @Override
-    protected void onAdd(INpc npc) {
-        super.onAdd(npc);
+    protected void onAttach(INpc npc) {
+        super.onAttach(npc);
 
         _isBaby = false;
         _isVillager = false;

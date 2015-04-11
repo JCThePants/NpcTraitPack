@@ -184,7 +184,7 @@ public abstract class ParticlesTrait extends NpcRunnableTrait {
     protected abstract void onEffect(Location location);
 
     @Override
-    protected void onAdd(INpc npc) {
+    protected void onAttach(INpc npc) {
         _chance = 0.3f;
         _runCount = -1;
         _currentRunCount = 0;

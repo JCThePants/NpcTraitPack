@@ -145,7 +145,7 @@ public abstract class WaypointsTrait extends NpcRunnableTrait {
     }
 
     @Override
-    protected void onRemove() {
+    protected void onDetach() {
         stop();
         clear();
         _subscriberAgents.disposeAgents();

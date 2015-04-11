@@ -146,7 +146,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onRemove() {
+        protected void onDetach() {
             // prep for reuse
             _pickedUp = null;
             _isItemsDropped = false;
