@@ -30,6 +30,7 @@ import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
+import com.jcwhatever.nucleus.utils.potions.PotionUtils;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -115,7 +116,9 @@ public class LivingEntityTrait extends NpcTrait {
     public LivingEntityTrait removePotionEffect(Object potionEffectType) {
         PreCon.notNull(potionEffectType);
 
-        PotionEffectType type = getPotionEffectType(potionEffectType);
+        PotionEffectType type = PotionUtils.getPotionEffectType(potionEffectType);
+        if (type == null)
+            throw new IllegalArgumentException("Invalid potion effect type: " + potionEffectType);
 
         LivingEntity entity = getLivingEntity();
         if (entity != null) {
