@@ -27,6 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.living;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
+import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.entity.EntityType;
@@ -78,7 +79,7 @@ public class EntityHorseTrait extends LivingEntityTrait {
      */
     public EntityHorseTrait setColor(Object color) {
 
-        _color = getEnum(color, Horse.Color.class);
+        _color = EnumUtils.getEnum(color, Horse.Color.class);
 
         Horse horse = getHorse();
         if (horse != null)
@@ -105,7 +106,7 @@ public class EntityHorseTrait extends LivingEntityTrait {
     public EntityHorseTrait setStyle(Object style) {
         PreCon.notNull(style);
 
-        _style = getEnum(style, Horse.Style.class);
+        _style = EnumUtils.getEnum(style, Horse.Style.class);
 
         Horse horse = getHorse();
         if (horse != null)
@@ -132,7 +133,7 @@ public class EntityHorseTrait extends LivingEntityTrait {
     public EntityHorseTrait setVariant(Object variant) {
         PreCon.notNull(variant);
 
-        _variant = getEnum(variant, Horse.Variant.class);
+        _variant = EnumUtils.getEnum(variant, Horse.Variant.class);
 
         Horse horse = getHorse();
         if (horse != null)

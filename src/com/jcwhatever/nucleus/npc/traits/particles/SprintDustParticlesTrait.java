@@ -28,6 +28,7 @@ import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
+import com.jcwhatever.nucleus.utils.EnumUtils;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -83,7 +84,7 @@ public class SprintDustParticlesTrait extends NpcTraitType {
          * @return  Self for chaining.
          */
         public SprintDustParticles setMaterial(Object material) {
-            Material mat = getEnum(material, Material.class);
+            Material mat = EnumUtils.getEnum(material, Material.class);
             _material = mat.getId();
             return this;
         }

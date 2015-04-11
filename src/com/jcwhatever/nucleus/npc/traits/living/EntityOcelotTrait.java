@@ -27,6 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.living;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
+import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.entity.EntityType;
@@ -73,7 +74,7 @@ public class EntityOcelotTrait extends EntityAgeableTrait {
     public EntityOcelotTrait setCatType(Object catType) {
         PreCon.notNull(catType);
 
-        Ocelot.Type type = getEnum(catType, Ocelot.Type.class);
+        Ocelot.Type type = EnumUtils.getEnum(catType, Ocelot.Type.class);
 
         _type = type;
 

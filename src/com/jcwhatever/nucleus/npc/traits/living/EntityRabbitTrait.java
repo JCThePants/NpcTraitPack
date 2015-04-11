@@ -27,6 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.living;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
+import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.entity.EntityType;
@@ -72,7 +73,7 @@ public class EntityRabbitTrait extends EntityAgeableTrait {
     public EntityRabbitTrait setRabbitType(Object type) {
         PreCon.notNull(type);
 
-        _type = getEnum(type, Rabbit.Type.class);
+        _type = EnumUtils.getEnum(type, Rabbit.Type.class);
 
         Rabbit rabbit = getRabbit();
 

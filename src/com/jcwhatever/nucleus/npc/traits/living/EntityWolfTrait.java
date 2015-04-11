@@ -27,6 +27,7 @@ package com.jcwhatever.nucleus.npc.traits.living;
 import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent.NpcSpawnReason;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
+import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.DyeColor;
@@ -74,7 +75,7 @@ public class EntityWolfTrait extends EntityAgeableTrait {
     public EntityWolfTrait setCollarColor(Object dyeColor) {
         PreCon.notNull(dyeColor);
 
-        DyeColor color = getEnum(dyeColor, DyeColor.class);
+        DyeColor color = EnumUtils.getEnum(dyeColor, DyeColor.class);
 
         _collarColor = color;
 

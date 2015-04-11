@@ -29,10 +29,11 @@ import com.jcwhatever.nucleus.npc.traits.flock.behaviours.Alignment;
 import com.jcwhatever.nucleus.npc.traits.flock.behaviours.Cohesion;
 import com.jcwhatever.nucleus.npc.traits.flock.behaviours.Separation;
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcRunnableTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
-import com.jcwhatever.nucleus.providers.npc.Npcs;
+import com.jcwhatever.nucleus.utils.EnumUtils;
 import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.Location;
@@ -120,7 +121,7 @@ public class FlockingTrait extends NpcTraitType {
         public Flocking setPolicy(Object policy) {
             PreCon.notNull(policy, "policy");
 
-            _policy = getEnum(policy, NpcFilterPolicy.class);
+            _policy = EnumUtils.getEnum(policy, NpcFilterPolicy.class);
 
             return this;
         }
