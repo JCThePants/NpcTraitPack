@@ -99,48 +99,47 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
     protected void onEnablePlugin() {
         _instance = this;
 
-        _nmsManager = new TraitNmsManager();
-        _waypointFactory = new WaypointPairFactory();
-
         INpcProvider provider = Nucleus.getProviders().getNpcs();
 
         if (provider == null) {
             getMessenger().warning("Nucleus NPC provider not detected. Disabling.");
             Bukkit.getPluginManager().disablePlugin(this);
+            return;
         }
-        else {
 
-            provider
-                    .registerTrait(new AggressiveTrait())
-                    .registerTrait(new ArcherTrait())
-                    .registerTrait(new FreezeHeightTrait())
-                    .registerTrait(new LookingTrait())
-                    .registerTrait(new NoDropsTrait())
-                    .registerTrait(new PickupVictimDropsTrait())
-                    .registerTrait(new ProtectPassengerTrait())
-                    .registerTrait(new RiderTrait())
-                    .registerTrait(new UnbreakingArmorTrait())
-                    .registerTrait(new UnbreakingWeaponTrait())
-                    .registerTrait(new FlockingTrait())
-                    .registerTrait(new SpigotActivatedTrait())
-                    .registerTrait(new ChunkLoaderTrait())
+        _nmsManager = new TraitNmsManager();
+        _waypointFactory = new WaypointPairFactory();
 
-                    .registerTrait(new SimpleWaypointsTrait())
-                    .registerTrait(new PlannedWaypointsTrait())
+        provider
+                .registerTrait(new AggressiveTrait())
+                .registerTrait(new ArcherTrait())
+                .registerTrait(new FreezeHeightTrait())
+                .registerTrait(new LookingTrait())
+                .registerTrait(new NoDropsTrait())
+                .registerTrait(new PickupVictimDropsTrait())
+                .registerTrait(new ProtectPassengerTrait())
+                .registerTrait(new RiderTrait())
+                .registerTrait(new UnbreakingArmorTrait())
+                .registerTrait(new UnbreakingWeaponTrait())
+                .registerTrait(new FlockingTrait())
+                .registerTrait(new SpigotActivatedTrait())
+                .registerTrait(new ChunkLoaderTrait())
 
-                    // particle traits
-                    .registerTrait(new EnderParticlesTrait())
-                    .registerTrait(new ExplosionParticlesTrait())
-                    .registerTrait(new FireParticlesTrait())
-                    .registerTrait(new GlyphParticlesTrait())
-                    .registerTrait(new HeartParticlesTrait())
-                    .registerTrait(new RainbowDustParticlesTrait())
-                    .registerTrait(new SmokeParticlesTrait())
-                    .registerTrait(new SprintDustParticlesTrait())
+                .registerTrait(new SimpleWaypointsTrait())
+                .registerTrait(new PlannedWaypointsTrait())
 
-                    // auto added traits
-                    .registerTrait(new LivingEntityTraitType());
-        }
+                        // particle traits
+                .registerTrait(new EnderParticlesTrait())
+                .registerTrait(new ExplosionParticlesTrait())
+                .registerTrait(new FireParticlesTrait())
+                .registerTrait(new GlyphParticlesTrait())
+                .registerTrait(new HeartParticlesTrait())
+                .registerTrait(new RainbowDustParticlesTrait())
+                .registerTrait(new SmokeParticlesTrait())
+                .registerTrait(new SprintDustParticlesTrait())
+
+                        // auto added traits
+                .registerTrait(new LivingEntityTraitType());
 
         Bukkit.getPluginManager().registerEvents(this, this);
     }
