@@ -29,6 +29,7 @@ import com.jcwhatever.nucleus.npc.traits.waypoints.plan.WaypointTimer;
 import com.jcwhatever.nucleus.npc.traits.waypoints.provider.IWaypointProvider;
 import com.jcwhatever.nucleus.npc.traits.waypoints.provider.SimpleWaypointProvider;
 import com.jcwhatever.nucleus.providers.npc.INpc;
+import com.jcwhatever.nucleus.providers.npc.Npcs;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent;
 import com.jcwhatever.nucleus.providers.npc.events.NpcDespawnEvent.NpcDespawnReason;
 import com.jcwhatever.nucleus.providers.npc.events.NpcEvent;
@@ -40,9 +41,14 @@ import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.coords.ChunkUtils;
 import com.jcwhatever.nucleus.utils.coords.Coords2Di;
 import com.jcwhatever.nucleus.utils.coords.MutableCoords2Di;
+import com.jcwhatever.nucleus.utils.entity.EntityUtils;
+import com.jcwhatever.nucleus.utils.validate.IValidator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -76,6 +82,14 @@ import javax.annotation.Nullable;
 public class PlannedWaypointsTrait  extends NpcTraitType {
 
     public static final String NAME = "PlannedWaypoints";
+    private static final IValidator<Entity> PLAYER_VALIDATOR = new IValidator<Entity>() {
+        @Override
+        public boolean isValid(Entity element) {
+            return element instanceof Player && !Npcs.isNpc(element);
+        }
+    };
+
+    private static final int PLAYER_RANGE = 45;
 
     /**
      * Constructor.
@@ -148,7 +162,9 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
             Location npcLocation = getNpc().getLocation(NPC_LOCATION);
 
-            if (!ChunkUtils.isNearbyChunksLoaded(npcLocation, CHUNK_RADIUS)) {
+            if (!ChunkUtils.isNearbyChunksLoaded(npcLocation, CHUNK_RADIUS) ||
+                    !EntityUtils.hasNearbyEntityType(
+                            getNpc().getEntity(), EntityType.PLAYER, PLAYER_RANGE, PLAYER_VALIDATOR)) {
                 despawn();
             }
         }
@@ -228,7 +244,9 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 boolean isNearbyChunksLoaded = ChunkUtils.isNearbyChunksLoaded(
                         npcLocation.getWorld(), chunkCoords.getX(), chunkCoords.getZ(), CHUNK_RADIUS);
 
-                if (isNearbyChunksLoaded) {
+                if (isNearbyChunksLoaded &&
+                        EntityUtils.hasNearbyEntityType(
+                                current, EntityType.PLAYER, PLAYER_RANGE, PLAYER_VALIDATOR)) {
                     stop(null);
                     setAwaitingRespawn(AwaitRespawnReason.INVOKED);
                     spawn(current);
