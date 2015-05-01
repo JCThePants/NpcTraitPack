@@ -165,6 +165,9 @@ public class WaypointPlan {
      * Get the number of locations in the planned path.
      */
     public int getPathSize() {
+        if (_path == null)
+            return 0;
+
         return _path.size();
     }
 
