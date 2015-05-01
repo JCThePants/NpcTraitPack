@@ -79,7 +79,7 @@ public class UnbreakingArmorTrait extends NpcTraitType {
 
     private static class EventListener implements Listener {
 
-        @EventHandler
+        @EventHandler(ignoreCancelled = true)
         private void onDamage(NpcDamageEvent event) {
 
             INpc npc = event.getNpc();

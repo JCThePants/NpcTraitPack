@@ -161,7 +161,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onNpcEntityTypeChange(NpcEntityTypeChangeEvent event) {
 
         if (event.getOldType().isAlive() == event.getNewType().isAlive())

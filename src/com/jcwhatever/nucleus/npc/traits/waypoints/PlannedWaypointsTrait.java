@@ -277,10 +277,10 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 return (PlannedWaypoints) traits.get(traitName);
             }
 
-            @EventHandler(priority = EventPriority.HIGH)
-            private void onNpcSpawn(final NpcSpawnEvent event) {
+            @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+            private void onNpcSpawn(NpcSpawnEvent event) {
 
-                final PlannedWaypoints trait = getTrait(event);
+                PlannedWaypoints trait = getTrait(event);
                 if (trait == null)
                     return;
 
@@ -288,7 +288,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
                 trait.setAwaitingRespawn(null);
             }
 
-            @EventHandler
+            @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
             private void onNpcDespawn(NpcDespawnEvent event) {
 
                 PlannedWaypoints trait = getTrait(event);

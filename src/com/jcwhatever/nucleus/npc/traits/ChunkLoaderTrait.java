@@ -193,7 +193,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
 
         private static final CoordLookup COORD_LOOKUP = new CoordLookup();
 
-        @EventHandler(priority = EventPriority.HIGHEST)
+        @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
         private void onNpcDespawn(NpcDespawnEvent event) {
 
             if (event.getReason() != NpcDespawnReason.CHUNK_UNLOAD)
@@ -205,7 +205,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
             event.setCancelled(true);
         }
 
-        @EventHandler(priority = EventPriority.HIGH)
+        @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
         private void onChunkUnload(ChunkUnloadEvent event) {
 
             COORD_LOOKUP.set(event.getChunk().getX(), event.getChunk().getZ());
@@ -214,7 +214,7 @@ public class ChunkLoaderTrait extends NpcTraitType {
                 event.setCancelled(true);
         }
 
-        @EventHandler(priority = EventPriority.MONITOR)
+        @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
         private void onTeleport(EntityTeleportEvent event) {
 
             INpc npc = Npcs.getNpc(event.getEntity());

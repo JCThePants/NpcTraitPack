@@ -82,7 +82,7 @@ public class UnbreakingWeaponTrait extends NpcTraitType {
 
     private static class EventListener implements Listener {
 
-        @EventHandler
+        @EventHandler(ignoreCancelled = true)
         private void onDamage(EntityDamageByEntityEvent event) {
 
             Entity damager = EntityUtils.getDamager(event.getDamager());

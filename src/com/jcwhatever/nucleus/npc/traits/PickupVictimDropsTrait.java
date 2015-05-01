@@ -159,7 +159,7 @@ public class PickupVictimDropsTrait extends NpcTraitType {
         private Map<Entity, INpc> _attackerMap = new WeakHashMap<>(20);
 
         // record NPC damager
-        @EventHandler(priority = EventPriority.MONITOR)
+        @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
         private void onEntityDamage(EntityDamageByEntityEvent event) {
 
             Entity entity = event.getEntity();
