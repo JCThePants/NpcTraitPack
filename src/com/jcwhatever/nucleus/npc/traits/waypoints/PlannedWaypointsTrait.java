@@ -164,7 +164,7 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
 
             if (!ChunkUtils.isNearbyChunksLoaded(npcLocation, CHUNK_RADIUS) ||
                     !EntityUtils.hasNearbyEntityType(
-                            getNpc().getEntity(), EntityType.PLAYER, PLAYER_RANGE, PLAYER_VALIDATOR)) {
+                            npcLocation, EntityType.PLAYER, PLAYER_RANGE, PLAYER_VALIDATOR)) {
                 despawn();
             }
         }
