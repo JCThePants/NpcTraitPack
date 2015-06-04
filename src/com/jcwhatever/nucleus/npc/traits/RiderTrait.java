@@ -145,6 +145,7 @@ public class RiderTrait extends NpcTraitType {
 
         @Override
         protected void onDetach() {
+            dismountCurrent();
             _vehicle = null;
         }
 
@@ -171,7 +172,7 @@ public class RiderTrait extends NpcTraitType {
 
         // dismount from the current vehicle npc without disposing it
         private void dismountCurrent() {
-            if (_vehicle == null || !getNpc().isSpawned() || !_vehicle.isSpawned())
+            if (_vehicle == null || !_vehicle.isSpawned())
                 return;
 
             Entity entity = _vehicle.getEntity();
