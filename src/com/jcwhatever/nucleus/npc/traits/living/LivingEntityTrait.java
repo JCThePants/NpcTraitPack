@@ -31,17 +31,16 @@ import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
 import com.jcwhatever.nucleus.utils.PreCon;
 import com.jcwhatever.nucleus.utils.potions.PotionUtils;
-
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.annotation.Nullable;
 
 /**
  * Trait for an NPC whose entity type is an implementation of a {@link org.bukkit.entity.LivingEntity}.
@@ -290,6 +289,8 @@ public class LivingEntityTrait extends NpcTrait {
 
         entity.setCanPickupItems(_canPickupItems);
         entity.setMaximumAir(_maxAir);
+        entity.setMaxHealth(_maxHealth);
+        entity.setHealth(_health);
     }
 
     /**
