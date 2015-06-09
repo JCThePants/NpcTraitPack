@@ -22,25 +22,43 @@
  * THE SOFTWARE.
  */
 
-package com.jcwhatever.nucleus.npc.traits.nms;
+package com.jcwhatever.nucleus.npc.traits.nms.v1_8_R3;
 
-import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
-import com.jcwhatever.nucleus.npc.traits.nms.v1_8_R2.SpigotActivationHandler_v1_8_R2;
-import com.jcwhatever.nucleus.npc.traits.nms.v1_8_R3.SpigotActivationHandler_v1_8_R3;
-import com.jcwhatever.nucleus.utils.nms.NmsManager;
+import com.jcwhatever.nucleus.npc.traits.nms.INmsSpigotActivationHandler;
+import com.jcwhatever.nucleus.utils.PreCon;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
+import org.bukkit.entity.Entity;
 
 /**
- * Nms manager.
+ * Spigot activation handler for v1_8_R3
  */
-public class TraitNmsManager extends NmsManager {
+public class SpigotActivationHandler_v1_8_R3 implements INmsSpigotActivationHandler {
 
-    public TraitNmsManager() {
-        super(NpcTraitPack.getPlugin());
+    private boolean _isAvailable;
 
-        registerHandler("v1_8_R2", "SPIGOT_ACTIVATION",
-                SpigotActivationHandler_v1_8_R2.class);
+    public SpigotActivationHandler_v1_8_R3() {
+        _isAvailable = Bukkit.getServer().toString().toLowerCase().contains("spigot");
+    }
 
-        registerHandler("v1_8_R3", "SPIGOT_ACTIVATION",
-                SpigotActivationHandler_v1_8_R3.class);
+    @Override
+    public boolean isAvailable() {
+        return _isAvailable;
+    }
+
+    @Override
+    public void activateEntity(Entity entity) {
+        PreCon.notNull(entity);
+
+        if (!isAvailable())
+            return;
+
+        if (!(entity instanceof CraftEntity))
+            return;
+
+        CraftEntity craftEntity = (CraftEntity)entity;
+
+        craftEntity.getHandle().activatedTick = MinecraftServer.currentTick;
     }
 }
