@@ -104,8 +104,13 @@ public class LookingTrait extends NpcTraitType {
         public Looking lookEntity(Entity entity) {
             PreCon.notNull(entity);
 
-            _handler = new LookEntity(this)
-                    .setLookEntity(entity);
+            if (_handler instanceof LookEntity) {
+                ((LookEntity) _handler).setLookEntity(entity);
+            }
+            else {
+                _handler = new LookEntity(this)
+                        .setLookEntity(entity);
+            }
 
             setEnabled(true);
 
@@ -124,8 +129,13 @@ public class LookingTrait extends NpcTraitType {
         public Looking lookLocation(Location location) {
             PreCon.notNull(location);
 
-            _handler = new LookLocation(this)
-                    .setLookLocation(location);
+            if (_handler instanceof LookLocation) {
+                ((LookLocation) _handler).setLookLocation(location);
+            }
+            else {
+                _handler = new LookLocation(this)
+                        .setLookLocation(location);
+            }
 
             setEnabled(true);
 
@@ -141,7 +151,8 @@ public class LookingTrait extends NpcTraitType {
          */
         public Looking lookClose() {
 
-            _handler = new LookClose(this);
+            if (!(_handler instanceof LookClose))
+                _handler = new LookClose(this);
 
             setEnabled(true);
 
@@ -157,7 +168,8 @@ public class LookingTrait extends NpcTraitType {
          */
         public Looking lookCasual() {
 
-            _handler = new LookCasual(this);
+            if (!(_handler instanceof LookCasual))
+                _handler = new LookCasual(this);
 
             setEnabled(true);
 
