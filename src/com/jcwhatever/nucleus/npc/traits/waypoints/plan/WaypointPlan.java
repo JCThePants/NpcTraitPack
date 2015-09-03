@@ -34,6 +34,7 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class WaypointPlan {
      * @param waypoints   The waypoint locations.
      * @param cachePairs  True to cache paths between pairs of waypoints for other instances to use.
      */
-    public void set(World world, List<Location> waypoints, boolean cachePairs) {
+    public void set(World world, Deque<Location> waypoints, boolean cachePairs) {
         PreCon.notNull(world);
         PreCon.notNull(waypoints);
         PreCon.isValid(!waypoints.isEmpty(), "waypoints cannot be empty.");

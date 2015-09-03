@@ -29,18 +29,20 @@ import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 
 import org.bukkit.Location;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedList;
 import javax.annotation.Nullable;
 
-/*
- * 
+/**
+ * Simple implementation of {@link IWaypointProvider}.
  */
 public class SimpleWaypointProvider implements IWaypointProvider {
 
-    private final LinkedList<Location> _waypoints = new LinkedList<>();
+    private final Deque<Location> _waypoints = new ArrayDeque<>(35);
     private Location _current;
 
-    public LinkedList<Location> getWaypoints() {
+    public Deque<Location> getWaypoints() {
         return _waypoints;
     }
 

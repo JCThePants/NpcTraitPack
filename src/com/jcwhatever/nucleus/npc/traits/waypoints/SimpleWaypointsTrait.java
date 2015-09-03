@@ -99,6 +99,13 @@ public class SimpleWaypointsTrait extends NpcTraitType {
             return this;
         }
 
+        /**
+         * Get the number of waypoints left to path.
+         */
+        public int size() {
+            return _provider.getWaypoints().size();
+        }
+
         @Override
         protected IWaypointProvider getWaypointProvider() {
             return _provider;

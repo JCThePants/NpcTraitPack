@@ -146,6 +146,13 @@ public class PlannedWaypointsTrait  extends NpcTraitType {
             return this;
         }
 
+        /**
+         * Get the number of waypoints left to path.
+         */
+        public int size() {
+            return _provider.getWaypoints().size();
+        }
+
         @Override
         protected void onAttach(INpc npc) {
             setInterval(10);
