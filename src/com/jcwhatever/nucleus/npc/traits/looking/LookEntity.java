@@ -39,6 +39,8 @@ import javax.annotation.Nullable;
  */
 public class LookEntity extends LookHandler {
 
+    private static final Location NPC_LOCATION = new Location(null, 0, 0, 0);
+
     private WeakReference<Entity> _entity;
 
     /**
@@ -86,6 +88,12 @@ public class LookEntity extends LookHandler {
         if (entity == null || entity.isDead() || !entity.isValid())
             return null;
 
-        return entity.getLocation(output);
+        entity.getLocation(output);
+
+        Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+        if (npcLocation == null || !entity.getWorld().equals(npcLocation.getWorld()))
+            return null;
+
+        return output;
     }
 }

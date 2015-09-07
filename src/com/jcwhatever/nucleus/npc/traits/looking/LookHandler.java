@@ -102,8 +102,12 @@ public abstract class LookHandler implements Runnable {
         if (look == null)
             return;
 
+        Location location = getNpc().getLocation(NPC_LOCATION);
+        if (location == null)
+            return;
+
         // make sure look location is in same world as NPC
-        if (!getNpc().getLocation(NPC_LOCATION).getWorld().equals(look.getWorld()))
+        if (!location.getWorld().equals(look.getWorld()))
             return;
 
         // add talk nod variation
@@ -153,11 +157,22 @@ public abstract class LookHandler implements Runnable {
      * @param location  The location to check.
      */
     protected double distanceSquared(Location location) {
-        return getNpc().getLocation(NPC_LOCATION).distanceSquared(location);
+        Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+        if (npcLocation == null || !npcLocation.getWorld().equals(location.getWorld()))
+            return -1;
+        return npcLocation.distanceSquared(location);
     }
 
     // get next look towards target location, return result in output location,
     private Location getNextLook(Location target, Location output, int steps) {
+
+        if (_currentLook.getWorld() == null) {
+            Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+            if (npcLocation == null)
+                return null;
+
+            LocationUtils.getYawLocation(npcLocation, 3.0D, npcLocation.getYaw(), _currentLook);
+        }
 
         Location current = _currentLook.getWorld() != null ? _currentLook : target;
         boolean isTarget = LocationUtils.isLocationMatch(current, target, 0.01D);

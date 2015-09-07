@@ -124,11 +124,15 @@ public class LookCasual extends LookHandler {
 
         return this;
     }
+
+    @Nullable
     @Override
     protected Location getLookLocation(Location output) {
 
         Entity closestEntity = getCurrentEntity();
         Location npcLocation = getNpc().getLocation(NPC_LOCATION);
+        if (npcLocation == null)
+            return null;
 
         switch (_mode) {
             case NONE:
