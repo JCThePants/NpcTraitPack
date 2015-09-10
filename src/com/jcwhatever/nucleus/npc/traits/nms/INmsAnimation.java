@@ -24,23 +24,42 @@
 
 package com.jcwhatever.nucleus.npc.traits.nms;
 
-import com.jcwhatever.nucleus.npc.traits.NpcTraitPack;
-import com.jcwhatever.nucleus.npc.traits.nms.v1_8_R2.SpigotActivationHandler_v1_8_R2;
-import com.jcwhatever.nucleus.npc.traits.nms.v1_8_R3.AnimationHandler_v1_8_R3;
-import com.jcwhatever.nucleus.npc.traits.nms.v1_8_R3.SpigotActivationHandler_v1_8_R3;
-import com.jcwhatever.nucleus.utils.nms.NmsManager;
+import java.util.Collection;
+
+import com.jcwhatever.nucleus.utils.nms.INmsHandler;
+
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 /**
- * Nms manager.
+ * Interface for an entity animation handler.
  */
-public class TraitNmsManager extends NmsManager {
+public interface INmsAnimation extends INmsHandler {
 
-    public TraitNmsManager() {
-        super(NpcTraitPack.getPlugin());
+    /**
+     * Send animation packet.
+     *
+     * @param recipient  The packet recipient.
+     * @param animated   The entity being animated.
+     * @param type       The animation type.
+     */
+    void sendAnimation(Player recipient, Entity animated, AnimationType type);
 
-        registerHandler("v1_8_R2", "SPIGOT_ACTIVATION", SpigotActivationHandler_v1_8_R2.class);
+    /**
+     * Send animation packet to multiple recipients.
+     *
+     * @param recipients  The packet recipients.
+     * @param animated    The entity being animated.
+     * @param type        The animation type.
+     */
+    void sendAnimation(Collection<? extends Player> recipients, Entity animated, AnimationType type);
 
-        registerHandler("v1_8_R3", "SPIGOT_ACTIVATION", SpigotActivationHandler_v1_8_R3.class);
-        registerHandler("v1_8_R3", "ENTITY_ANIMATION", AnimationHandler_v1_8_R3.class);
+    enum AnimationType {
+        ARM_SWING,
+        TAKE_DAMAGE,
+        LEAVE_BED,
+        EAT_FOOD,
+        CRIT_EFFECT,
+        MAGIC_CRIT_EFFECT
     }
 }

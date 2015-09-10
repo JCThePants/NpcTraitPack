@@ -174,7 +174,7 @@ public abstract class LookHandler implements Runnable {
             LocationUtils.getYawLocation(npcLocation, 3.0D, npcLocation.getYaw(), _currentLook);
         }
 
-        Location current = _currentLook.getWorld() != null ? _currentLook : target;
+        Location current = _currentLook;
         boolean isTarget = LocationUtils.isLocationMatch(current, target, 0.01D);
 
         double deltaX = 0;

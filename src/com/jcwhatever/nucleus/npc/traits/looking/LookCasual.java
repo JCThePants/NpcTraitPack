@@ -27,12 +27,11 @@ package com.jcwhatever.nucleus.npc.traits.looking;
 import com.jcwhatever.nucleus.npc.traits.looking.LookingTrait.Looking;
 import com.jcwhatever.nucleus.utils.coords.LocationUtils;
 import com.jcwhatever.nucleus.utils.entity.EntityUtils;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-import java.lang.ref.WeakReference;
 import javax.annotation.Nullable;
+import java.lang.ref.WeakReference;
 
 /**
  * {@link LookingTrait} handler which handles looking at {@link org.bukkit.entity.LivingEntity}'s
@@ -133,6 +132,9 @@ public class LookCasual extends LookHandler {
         Location npcLocation = getNpc().getLocation(NPC_LOCATION);
         if (npcLocation == null)
             return null;
+
+        if (_startLook.getWorld() == null)
+            LocationUtils.getYawLocation(npcLocation, 3.0D, npcLocation.getYaw(), _startLook);
 
         switch (_mode) {
             case NONE:

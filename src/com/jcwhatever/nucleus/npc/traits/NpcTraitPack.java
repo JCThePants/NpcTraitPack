@@ -124,6 +124,9 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                 .registerTrait(new FlockingTrait())
                 .registerTrait(new SpigotActivatedTrait())
                 .registerTrait(new ChunkLoaderTrait())
+                .registerTrait(new VisibilityTrait())
+                .registerTrait(new AnimationTrait())
+                .registerTrait(new DamageLimiterTrait())
 
                 .registerTrait(new SimpleWaypointsTrait())
                 .registerTrait(new PlannedWaypointsTrait())

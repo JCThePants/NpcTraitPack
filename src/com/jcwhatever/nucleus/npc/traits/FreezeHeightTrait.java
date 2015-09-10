@@ -42,6 +42,7 @@ import org.bukkit.util.Vector;
 public class FreezeHeightTrait extends NpcTraitType {
 
     private static final String NAME = "FreezeHeight";
+    private static final Location CACHE_LOCATION = new Location(null, 0, 0, 0);
 
     /**
      * Constructor.
@@ -86,7 +87,7 @@ public class FreezeHeightTrait extends NpcTraitType {
 
             Vector vector = entity.getVelocity();
 
-            Location location = getNpc().getLocation();
+            Location location = getNpc().getLocation(CACHE_LOCATION);
             assert location != null;
 
             if (Double.compare(location.getY(), _y) < 0) {
@@ -100,13 +101,14 @@ public class FreezeHeightTrait extends NpcTraitType {
         }
 
         @Override
-        protected void onEnable() {
+        public NpcTrait enable() {
             setY();
+            return super.enable();
         }
 
         private void setY() {
             if (getNpc().isSpawned()) {
-                Location location = getNpc().getLocation();
+                Location location = getNpc().getLocation(CACHE_LOCATION);
                 assert location != null;
 
                 _y = location.getY();
