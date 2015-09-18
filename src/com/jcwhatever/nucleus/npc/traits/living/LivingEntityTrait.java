@@ -37,10 +37,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import javax.annotation.Nullable;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 /**
  * Trait for an NPC whose entity type is an implementation of a {@link org.bukkit.entity.LivingEntity}.
@@ -53,7 +54,7 @@ import java.util.LinkedList;
 public class LivingEntityTrait extends NpcTrait {
 
     private final EntityType _entityType;
-    private final LinkedList<PotionEffect> _potions = new LinkedList<>();
+    private final Deque<PotionEffect> _potions = new ArrayDeque<>(5);
     private boolean _canPickupItems;
     private int _maxAir;
     private double _maxHealth;

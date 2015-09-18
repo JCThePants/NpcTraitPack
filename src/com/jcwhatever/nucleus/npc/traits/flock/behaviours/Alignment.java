@@ -24,12 +24,13 @@
 
 package com.jcwhatever.nucleus.npc.traits.flock.behaviours;
 
+import java.util.Deque;
+
 import com.jcwhatever.nucleus.providers.npc.INpc;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-import java.util.LinkedList;
 
 /**
  * Flocking alignment behaviour.
@@ -55,7 +56,7 @@ public class Alignment extends FlockBehaviour {
         if (!npc.isSpawned() || getFlock().isEmpty())
             return;
 
-        LinkedList<INpc> flock = getFlock();
+        Deque<INpc> flock = getFlock();
         int flockSize = flock.size();
 
         resetVector(RESULTANT);

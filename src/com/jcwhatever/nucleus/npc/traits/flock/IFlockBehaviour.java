@@ -28,6 +28,7 @@ import com.jcwhatever.nucleus.providers.npc.INpc;
 
 import org.bukkit.util.Vector;
 
+import java.util.Deque;
 import java.util.List;
 
 /**
@@ -69,12 +70,12 @@ public interface IFlockBehaviour {
     IFlockBehaviour setRadius(double radius);
 
     /**
-     * Get the behaviours list of {@link INpc's} that will be used to
+     * Get the behaviours que of {@link INpc's} that will be used to
      * calculate a new vector when {@link #modifyVector} is invoked.
      *
-     * <p>NPC's can be directly added and removed from the returned list.</p>
+     * <p>NPC's can be directly added and removed from the returned que.</p>
      */
-    List<INpc> getFlock();
+    Deque<INpc> getFlock();
 
     /**
      * Modify a vector that will be added to the NPC.

@@ -32,7 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-import java.util.LinkedList;
+import java.util.Deque;
 
 /**
  * Flocking cohesion behaviour.
@@ -60,7 +60,7 @@ public class Cohesion extends FlockBehaviour {
         if (!npc.isSpawned() || getFlock().isEmpty())
             return;
 
-        LinkedList<INpc> flock = getFlock();
+        Deque<INpc> flock = getFlock();
         int flockSize = flock.size();
 
         resetVector(RESULTANT);

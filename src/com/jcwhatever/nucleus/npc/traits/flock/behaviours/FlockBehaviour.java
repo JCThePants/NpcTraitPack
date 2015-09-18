@@ -30,14 +30,15 @@ import com.jcwhatever.nucleus.utils.PreCon;
 
 import org.bukkit.util.Vector;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * Abstract implementation of {@link IFlockBehaviour}.
  */
 public abstract class FlockBehaviour implements IFlockBehaviour {
 
-    private final LinkedList<INpc> _flock = new LinkedList<>();
+    private final Deque<INpc> _flock = new ArrayDeque<>(15);
     private double _weight = 1.0D;
     private double _radius = 3.0D;
 
@@ -70,7 +71,7 @@ public abstract class FlockBehaviour implements IFlockBehaviour {
     }
 
     @Override
-    public LinkedList<INpc> getFlock() {
+    public Deque<INpc> getFlock() {
         return _flock;
     }
 

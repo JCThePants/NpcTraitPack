@@ -31,7 +31,6 @@ import org.bukkit.Location;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 import javax.annotation.Nullable;
 
 /**

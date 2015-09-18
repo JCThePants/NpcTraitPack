@@ -32,7 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
-import java.util.LinkedList;
+import java.util.Deque;
 
 /**
  * Flocking separation behaviour.
@@ -67,7 +67,7 @@ public class Separation extends FlockBehaviour {
 
         Vector npcVector = getLocation(entity).toVector();
 
-        LinkedList<INpc> flock = getFlock();
+        Deque<INpc> flock = getFlock();
         int flockSize = flock.size();
 
         while (!flock.isEmpty()) {
