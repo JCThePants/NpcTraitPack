@@ -28,7 +28,7 @@ import com.jcwhatever.nucleus.providers.npc.INpc;
 import com.jcwhatever.nucleus.providers.npc.events.NpcSpawnEvent;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTrait;
 import com.jcwhatever.nucleus.providers.npc.traits.NpcTraitType;
-import com.jcwhatever.nucleus.utils.nms.INmsEntityVisibilityHandler;
+import com.jcwhatever.nucleus.utils.nms.INmsEntityHandler;
 import com.jcwhatever.nucleus.utils.nms.NmsUtils;
 
 /**
@@ -37,7 +37,7 @@ import com.jcwhatever.nucleus.utils.nms.NmsUtils;
 public class VisibilityTrait extends NpcTraitType {
 
     private static final String NAME = "Visibility";
-    private static final INmsEntityVisibilityHandler HANDLER = NmsUtils.getEntityVisibilityHandler();
+    private static final INmsEntityHandler HANDLER = NmsUtils.getEntityHandler();
 
     /**
      * Constructor.
