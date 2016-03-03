@@ -24,14 +24,13 @@
 
 package com.jcwhatever.nucleus.npc.traits.waypoints.plan;
 
+import com.jcwhatever.nucleus.managed.astar.AStar;
+import com.jcwhatever.nucleus.managed.astar.IAStarResult;
+import com.jcwhatever.nucleus.managed.astar.IAStarResult.ResultStatus;
+import com.jcwhatever.nucleus.managed.astar.nodes.AStarNode;
 import com.jcwhatever.nucleus.utils.PreCon;
-import com.jcwhatever.nucleus.utils.astar.AStar;
-import com.jcwhatever.nucleus.utils.astar.AStarResult;
-import com.jcwhatever.nucleus.utils.astar.AStarResult.AStarResultStatus;
-import com.jcwhatever.nucleus.utils.astar.AStarUtils;
 import com.jcwhatever.nucleus.utils.coords.ICoords3Di;
 import com.jcwhatever.nucleus.utils.coords.MutableCoords3Di;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * Represents a pair of waypoints and the path between them.
  *
- * <p>Uses {@link com.jcwhatever.nucleus.utils.astar.AStar} to generate path points between the start
+ * <p>Uses AStar to generate path points between the start
  * and end locations of the waypoint pair.</p>
  */
 public class WaypointPair {
@@ -48,7 +47,7 @@ public class WaypointPair {
     private final World _world;
     private final MutableCoords3Di _start = new MutableCoords3Di();
     private final MutableCoords3Di _end = new MutableCoords3Di();
-    private final AStarResult _path;
+    private final IAStarResult<AStarNode> _path;
     private final int _hash;
 
     /**
@@ -71,8 +70,7 @@ public class WaypointPair {
         _hash = start.getBlockX() ^ start.getBlockY() ^ start.getBlockZ() ^
                 end.getBlockX() ^ end.getBlockY() ^ end.getBlockZ();
 
-        AStar astar = AStarUtils.getAStar(start.getWorld());
-        _path = AStarUtils.searchSurface(astar, start, end);
+        _path = AStar.search(start, end);
     }
 
     /**
@@ -87,7 +85,7 @@ public class WaypointPair {
      * to the end location.
      */
     public boolean hasPath() {
-        return _path.getStatus() == AStarResultStatus.RESOLVED;
+        return _path.getStatus() == ResultStatus.RESOLVED;
     }
 
     /**

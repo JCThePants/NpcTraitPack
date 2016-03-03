@@ -127,6 +127,7 @@ public class NpcTraitPack extends NucleusPlugin implements Listener {
                 .registerTrait(new VisibilityTrait())
                 .registerTrait(new AnimationTrait())
                 .registerTrait(new DamageLimiterTrait())
+                .registerTrait(new SitTrait())
 
                 .registerTrait(new SimpleWaypointsTrait())
                 .registerTrait(new PlannedWaypointsTrait())
